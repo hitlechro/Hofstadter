@@ -1,0 +1,5 @@
+*.o
+*.dll
+*.exe
+*.docx
+Documentation/Hofstadter - Manual.pdf

@@ -1,0 +1,17 @@
+INPUT(
+./debug\Sequence.o
+./debug\Calculator.o
+./debug\FilterOptions.o
+./debug\SummaryOptions.o
+./debug\ConfigPage.o
+./debug\SelectPage.o
+./debug\ResultPage.o
+./debug\Main.o
+./debug\ConfigWizard.o
+./debug\OptionPage.o
+./debug\moc_ConfigPage.o
+./debug\moc_SelectPage.o
+./debug\moc_ResultPage.o
+./debug\moc_ConfigWizard.o
+./debug\moc_OptionPage.o
+);

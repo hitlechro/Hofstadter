@@ -1,0 +1,1 @@
+Special thanks to @lukepetrolekas for all his help in migrating this project from Qt 4.8.2 to Qt 5.4.1. This could not have done this without you.

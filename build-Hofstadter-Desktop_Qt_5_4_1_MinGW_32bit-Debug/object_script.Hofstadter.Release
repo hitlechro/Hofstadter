@@ -1,0 +1,17 @@
+INPUT(
+./release/Sequence.o
+./release/Calculator.o
+./release/FilterOptions.o
+./release/SummaryOptions.o
+./release/ConfigPage.o
+./release/SelectPage.o
+./release/ResultPage.o
+./release/Main.o
+./release/ConfigWizard.o
+./release/OptionPage.o
+./release/moc_ConfigPage.o
+./release/moc_SelectPage.o
+./release/moc_ResultPage.o
+./release/moc_ConfigWizard.o
+./release/moc_OptionPage.o
+);

@@ -2,7 +2,17 @@
 #define SELECTPAGE_H
 
 #include "ClassDefs.h"
-#include <QWizardPage>
+#include <QtWidgets/QWizardPage>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QListWidget>
+#include <QtWidgets/QListWidgetItem>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QHBoxLayout>
+
+#include <QFile>
+#include <QTextStream>
+#include <QDebug>
 
 class SelectPage : public QWizardPage
 {

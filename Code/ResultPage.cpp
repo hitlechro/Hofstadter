@@ -8,6 +8,8 @@
 #include <limits>
 #include "Sequence.h"
 
+#include <QDebug>
+
 typedef set<int> Set;
 
 using namespace std;
@@ -25,7 +27,7 @@ class CopyTableWidget : public QTableWidget {
 
 CopyTableWidget::CopyTableWidget(int rows, int cols, QWidget* parent) :
     QTableWidget(rows, cols, parent){
-        //this->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
+        //this->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
 }
 
 //CopyTableWidget::~CopyTableWidget(){}
@@ -140,7 +142,7 @@ void ResultPage::showSequence(int r, int c){
             new QListWidgetItem(tr("%1 - %2").arg(i * 10000 + 1).arg((i+1) * 10000), rangeList);
         }
 
-        //rangeList->setResizeMode(QListView::Adjust);
+        //rangeList->setSectionResizeMode(QListView::Adjust);
         CopyTableWidget *SequenceTable = new CopyTableWidget(ceil((double)(V[r].size()-1) / 10), 10);
         SequenceTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
         QStringList verticalHeader;
@@ -152,7 +154,7 @@ void ResultPage::showSequence(int r, int c){
         }
         SequenceTable->setVerticalHeaderLabels(verticalHeader);
         SequenceTable->resizeColumnsToContents();
-        SequenceTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+        SequenceTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
         QSizePolicy sizeP;
         SequenceTable->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         //rangeList->setMaximumWidth(100);
@@ -183,7 +185,7 @@ void ResultPage::showSequence(int r, int c){
             dialogLayout->addWidget(errorLabel);
         } else {
 
-            //rangeList->setResizeMode(QListView::Adjust);
+            //rangeList->setSectionResizeMode(QListView::Adjust);
             CopyTableWidget *SlowTable = new CopyTableWidget(slowPropIntervalVector[r].size() - 2, 3);
             QStringList verticalHeader;
 
@@ -201,7 +203,7 @@ void ResultPage::showSequence(int r, int c){
             }
             SlowTable->setVerticalHeaderLabels(verticalHeader);
             SlowTable->resizeColumnsToContents();
-            SlowTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+            SlowTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
             QSizePolicy sizeP;
             SlowTable->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
@@ -233,7 +235,7 @@ void ResultPage::showSequence(int r, int c){
             dialogLayout->addWidget(errorLabel);
         } else {
 
-            //rangeList->setResizeMode(QListView::Adjust);
+            //rangeList->setSectionResizeMode(QListView::Adjust);
             CopyTableWidget *GenerationTable = new CopyTableWidget(genEndVector[r].size() - 2, 3);
             QStringList verticalHeader;
 
@@ -249,7 +251,7 @@ void ResultPage::showSequence(int r, int c){
 
             GenerationTable->setVerticalHeaderLabels(verticalHeader);
             GenerationTable->resizeColumnsToContents();
-            GenerationTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+            GenerationTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
             QSizePolicy sizeP;
             GenerationTable->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
             GenerationTable->setHorizontalHeaderLabels(QStringList() << "Start" << "End" << "Slow Proportion");
@@ -277,7 +279,7 @@ void ResultPage::showSequence(int r, int c){
             new QListWidgetItem(tr("%1 - %2").arg(i * 10000 + 1).arg((i+1) * 10000), rangeList);
         }
 
-        //rangeList->setResizeMode(QListView::Adjust);
+        //rangeList->setSectionResizeMode(QListView::Adjust);
         CopyTableWidget *SequenceTable = new CopyTableWidget(ceil((double)(V[r].size()-1) / 10), 10);
         QStringList verticalHeader;
 
@@ -288,7 +290,7 @@ void ResultPage::showSequence(int r, int c){
         }
         SequenceTable->setVerticalHeaderLabels(verticalHeader);
         SequenceTable->resizeColumnsToContents();
-        SequenceTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+        SequenceTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
         QSizePolicy sizeP;
         SequenceTable->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         //rangeList->setMaximumWidth(100);
@@ -616,7 +618,7 @@ void ResultPage::initializePage(){
 
     CopyTableWidget *mainTable = new CopyTableWidget(0,headers.size());
     mainTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    //mainTable->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
+    //mainTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
     //mainTable->setHorizontalHeaderLabels(headers);
     //mainTable->horizontalHeader()->setStretchLastSection(true);
 
@@ -634,9 +636,8 @@ void ResultPage::initializePage(){
 
     int row = 0;
     // new code starts
-    for (int i = 0; i < para_list.size(); i++){
+    for (uint i = 0; i < para_list.size(); i++){
         bool usingCustomIC = false; //is true if the IC should be updated on each iteration (multiple IC configurations)
-        int ICindex = 0;
         if (progress.wasCanceled()){
             break;
         }
@@ -679,7 +680,7 @@ void ResultPage::initializePage(){
                 row++;
             }
         }else{
-            for(int j = 0; j < IC_list.size(); j++){
+            for(uint j = 0; j < IC_list.size(); j++){
                 progress.setValue(IC_list.size()*i + j);
                 Sequence S = Sequence(recursion, para_list[i], IC_list.at(j), constraintList);
                 if(analyzeSequence(&S, so, fo, GS_list)){
@@ -1097,7 +1098,7 @@ void ResultPage::configOutputTable(SummaryOptions so, Sequence S, int row, int s
  */
 void ResultPage::configMainTableHeaders(QTableWidget* mainTable){
     mainTable->setHorizontalHeaderLabels(headers);
-    mainTable->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
+    mainTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
     mainTable->horizontalHeader()->setStretchLastSection(true);
     mainTable->resizeColumnsToContents();
     mainTable->resizeColumnToContents(0);
@@ -1141,7 +1142,7 @@ void ResultPage::addToTable(Sequence S, vector<int> para_list, vector<int> curre
     int col = 0;
 
     /* Adds the column with the parameter info */
-    for(int i = 0; i < para_list.size(); i++){
+    for(uint i = 0; i < para_list.size(); i++){
         paraValueString += tr("%1").arg(para_list.at(i));
         if(i != para_list.size() - 1){
             paraValueString += tr(",");
@@ -1153,7 +1154,7 @@ void ResultPage::addToTable(Sequence S, vector<int> para_list, vector<int> curre
 
 
     /* Adds the column with the initial condition info */
-    for(int i = 0; i < currentIC.size(); i++){
+    for(uint i = 0; i < currentIC.size(); i++){
         ICValueString += tr("%1").arg(currentIC.at(i));
         if(i != currentIC.size() - 1){
             ICValueString += tr(",");

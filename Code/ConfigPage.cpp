@@ -44,7 +44,7 @@ ConfigPage::ConfigPage(QWidget *parent)
     //paraTable->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
 
     /*??? */
-    QLabel *paraLabel_1 = new QLabel(tr("Extra Constraints"));
+    //QLabel *paraLabel_1 = new QLabel(tr("Extra Constraints"));
     QVBoxLayout *constraintBox = new QVBoxLayout;
     //QVBoxLayout *paraLayout_2 = new QVBoxLayout;
 
@@ -95,8 +95,8 @@ ConfigPage::ConfigPage(QWidget *parent)
 
     /* ??? what are these for? */
     QLabel *ICLabel = new QLabel(tr("Define initial conditions:"));
-    QLabel *ICLabel_0 = new QLabel(tr("For Multiple Sets of Parameters:"));
-    QLabel *ICLabel_1 = new QLabel(tr("For Single Set of Parameters:"));
+    //QLabel *ICLabel_0 = new QLabel(tr("For Multiple Sets of Parameters:"));
+    //QLabel *ICLabel_1 = new QLabel(tr("For Single Set of Parameters:"));
 
     /* Creates the radio buttons and makes "All ones" the default */
     QRadioButton *ICOnesButton = new QRadioButton(tr("All Ones"));
@@ -394,7 +394,7 @@ ConfigPage::ConfigPage(QWidget *parent)
     radioFreqGroup->addButton(radioFreqMatchNot);
     radioFreqGroup->addButton(radioFreqMatchBoth);
 
-    QVBoxLayout *filterLayout_main = new QVBoxLayout;
+    //QVBoxLayout *filterLayout_main = new QVBoxLayout;
     //filterLayout_main->addLayout(filterLayout);
 
     QGroupBox *filterGroupBox = new QGroupBox(tr("Filtering"));
@@ -473,7 +473,7 @@ void ConfigPage::initializePage(){
         paraTable->setRowCount(0);
     }else {
         int row = 1;
-        for (int i = 0; i < S.c.parameter.size(); i++)
+        for (uint i = 0; i < S.c.parameter.size(); i++)
         {
             QString converter;
             //cout << "Param i: " << S.c.parameter[i] << endl;
@@ -590,7 +590,7 @@ void ConfigPage::updateConstraintLineEdit()
     paraConstraintGlobalLineEdit->setText(constraintString);
 }
 
-
+//TODO: R is not used
 void ConfigPage::updateICLineEdit(int r, int c)
 {
     QString ICString;

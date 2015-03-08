@@ -1,0 +1,5 @@
+3
+R(n-R(n-1))+R(n-R(n-2))
+R(n-R(n-a))+R(n-R(n-b))
+R(n-R(n -a)) + R( n-R(n-b))
+R(n-R(n -a)) + R( n-R(n-b)) +  R( n-R(n-2))

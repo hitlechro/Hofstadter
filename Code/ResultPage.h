@@ -4,7 +4,27 @@
 #include "ClassDefs.h"
 #include "SummaryOptions.h"
 #include "Sequence.h"
-#include <QWizardPage>
+#include <QtWidgets/QWizardPage>
+
+#include <QtWidgets/QApplication>
+
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QListWidget>
+#include <QtWidgets/QListWidgetItem>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QTableWidget>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QProgressDialog>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QComboBox>
+#include <QKeyEvent>
+#include <QMimeData>
+#include <QClipboard>
 
 class ResultPage : public QWizardPage
 {

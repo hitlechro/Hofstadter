@@ -137,7 +137,7 @@ static set<int> parseRanges(string ranges){
     tokens.push_back(ranges);
 
     /* iterate over the set of number-strings */
-    for (int i = 0; i < tokens.size(); i++){
+    for (uint i = 0; i < tokens.size(); i++){
         if (tokens[i].find("-") == string::npos){
             /* if t[i] is a number, add it to S */
             values.insert(values.end(), toNumber(tokens[i]));

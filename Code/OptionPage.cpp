@@ -21,7 +21,7 @@ void OptionPage::updateLabel()
     qDebug() << "Recursion = " << newLabel << " paras " << field("paraList").toString();
 
     /* Replaces each parameter with its value */
-    for (int i = 0; i < S.c.parameter.size(); i++)
+    for (uint i = 0; i < S.c.parameter.size(); i++)
     {
 
         QString converter;
@@ -97,6 +97,7 @@ void OptionPage::updateGS(int noIC)
     GSTable->resizeRowsToContents();
 }
 
+//TODO: R is not used
 void OptionPage::updateGSLineEdit(int r, int c)
 {
     QString GSString;

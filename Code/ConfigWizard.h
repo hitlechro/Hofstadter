@@ -1,9 +1,8 @@
 #ifndef CONFIGWIZARD_H
 #define CONFIGWIZARD_H
 
-#include <QWizard>
+#include <QtWidgets/QWizard>
 #include "ClassDefs.h"
-
 
 class ConfigWizard : public QWizard
 {

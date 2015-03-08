@@ -159,12 +159,12 @@ int Calculator::evaluate(int n, vector<int>& R, vector<string> s){
     }	 // todo: is this reliable?
 
     // used later in the function.
-    bool isParameter = s.size() == 1
-            && paraID.find(s[0]) != paraID.end();
+    //bool isParameter = s.size() == 1
+    //        && paraID.find(s[0]) != paraID.end();
 
     /* Evaluates all algebraic expressions in the vector.
     This is recursive, so all subexpressions are evaluated as well. */
-    int ret = 0;
+    //int ret = 0;
     if(s.size() == 1){
         s[0] = toString(stringEvaluate(n, R, s[0]));
     }else{
@@ -193,7 +193,7 @@ int Calculator::evaluate(int n, vector<int>& R, vector<string> s){
     /* Performs all exponent operations */
     for(int i = 0; i < s.size(); i++){
         if(s[i] == "^"){
-            s[i-1] = toString(pow(toNumber(s[i-1]), toNumber(s[i+1])));
+            s[i-1] = toString((double) pow(toNumber(s[i-1]), (double) toNumber(s[i+1])));
             s.erase(s.begin()+i, s.begin()+i+2);
             i-=2;
         }
@@ -298,7 +298,7 @@ int Calculator::algebraEvaluate(string s){
             int base = algebraEvaluate(expression[i-1]);
             int exponent = algebraEvaluate(expression[i+1]);
             expression.erase(expression.begin()+i, expression.begin()+i+2);
-            expression[i-1] = toString(pow(base, exponent));
+            expression[i-1] = toString(pow((double) base, (double) exponent));
             i -= 2;
         }
     }

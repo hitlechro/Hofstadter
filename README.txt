@@ -7,3 +7,4 @@ Open Hofstadter.pro in QT and click on Projects on the left (If not already sele
 Ensure MinGW is selected as a build kit.
 Click "Configure Project" -- this creates the .pro.user file for your machine.
 Build the project.
+If you get build errors, try editing the Hofstadter.pro file, saving, revert the changes, and save again. This should run the qmake and fix the problem. We currently have no fix for this.

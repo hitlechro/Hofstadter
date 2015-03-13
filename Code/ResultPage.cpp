@@ -328,7 +328,7 @@ void ResultPage::initializePage(){
     /* Imports the summary options from that page */
     importOptionsPage();
 
-    qDebug() << " Termiante At "  << termination;
+    qDebug() << " Terminate at:"  << termination;
 
     /*******************************
      *       Recursion Title       *

@@ -42,7 +42,7 @@ HEADERS  += \
     ConfigWizard.h \
     OptionPage.h
 
-greaterThan(QT_MAJOR_VERSION, 5): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 # Please do not modify the following two lines. Required for deployment.
 # include(qmlapplicationviewer/qmlapplicationviewer.pri)
 # qtcAddDeployment()

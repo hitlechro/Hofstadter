@@ -102,6 +102,7 @@ ConfigPage::ConfigPage(QWidget *parent)
     QRadioButton *ICOnesButton = new QRadioButton(tr("All Ones"));
     QRadioButton *ICTwoButton= new QRadioButton(tr("All Ones followed by a Two"));
     QRadioButton *ICCustomButton = new QRadioButton(tr("No. of ICs : "));
+    QCheckBox *ICStartAtButton = new QCheckBox(tr("Start at:"));
     ICOnesButton->setChecked(true);
 
 
@@ -111,11 +112,18 @@ ConfigPage::ConfigPage(QWidget *parent)
     ICCustomLayout->addWidget(ICCustomButton);
     ICCustomLayout->addWidget(ICSpinBox);
 
+    /* Creates the text field for start IC point */
+    ICStartSpinBox = new QSpinBox;
+    QHBoxLayout *ICStartCustomLayout = new QHBoxLayout;
+    ICStartCustomLayout ->addWidget(ICStartAtButton);
+    ICStartCustomLayout ->addWidget(ICStartSpinBox);
+
     /* Groups all radio buttons into a single group */
     QButtonGroup *ICButtonGroup = new QButtonGroup;
     ICButtonGroup->addButton(ICOnesButton);
     ICButtonGroup->addButton(ICTwoButton);
     ICButtonGroup->addButton(ICCustomButton);
+    ICButtonGroup->addButton(ICStartAtButton);
 
     /* Creates the table for the IC, and sets the headers and dimensions */
     ICTable = new QTableWidget(0,2);
@@ -129,6 +137,7 @@ ConfigPage::ConfigPage(QWidget *parent)
     ICButtonlayout->addWidget(ICOnesButton);
     ICButtonlayout->addWidget(ICTwoButton);
     ICButtonlayout->addLayout(ICCustomLayout);
+    ICButtonlayout->addLayout(ICStartCustomLayout);
 
     /* Puts the button layout and the table into a single layout */
     QHBoxLayout *ICLayout = new QHBoxLayout;
@@ -147,11 +156,15 @@ ConfigPage::ConfigPage(QWidget *parent)
     ICGlobalLineEdit->setText(tr(""));
     connect(ICTable, SIGNAL(cellChanged(int, int)), this, SLOT(updateICLineEdit(int, int)));
 
+    /* Adds listeners to the IC Start spinbox and table */
+    /* TODO: */
+
     /* Register the IC buttons */
     registerField(tr("ICList"), ICGlobalLineEdit);
     registerField(tr("ICOnesButton"), ICOnesButton);
     registerField(tr("ICTwoButton"), ICTwoButton);
     registerField(tr("ICCustomButton"), ICCustomButton);
+    registerField(tr("ICStartAtButton"), ICStartAtButton);
 
     /* Merges the parameters and IC into a single layout */
     QHBoxLayout *paraICLayout = new QHBoxLayout;

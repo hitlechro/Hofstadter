@@ -42,8 +42,8 @@ private:
     QTableWidget *paraTable;
 
 
-
-    QSpinBox *ICSpinBox;
+    QSpinBox *ICStartSpinBox;
+    QSpinBox *ICFinishSpinBox;
     QTableWidget *ICTable;
     QLineEdit *ICGlobalLineEdit;
     QSpinBox *GSSpinBox;

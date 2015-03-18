@@ -102,14 +102,25 @@ ConfigPage::ConfigPage(QWidget *parent)
     QRadioButton *ICOnesButton = new QRadioButton(tr("All Ones"));
     QRadioButton *ICTwoButton= new QRadioButton(tr("All Ones followed by a Two"));
     QRadioButton *ICCustomButton = new QRadioButton(tr("No. of ICs : "));
+
+    /* Set default radio button selected */
     ICOnesButton->setChecked(true);
 
-
     /* Creates the text field for custom IC list */
-    ICSpinBox = new QSpinBox;
+    ICStartSpinBox = new QSpinBox;
+    ICFinishSpinBox = new QSpinBox;
     QHBoxLayout *ICCustomLayout = new QHBoxLayout;
     ICCustomLayout->addWidget(ICCustomButton);
-    ICCustomLayout->addWidget(ICSpinBox);
+    ICCustomLayout->addWidget(ICStartSpinBox);
+    ICCustomLayout->addWidget(ICFinishSpinBox);
+
+    /* Set spinbox range */
+    ICStartSpinBox->setRange(-32767, 32767);
+    ICFinishSpinBox->setRange(-32767, 32767);
+
+    /* Set default spinbox selected */
+    ICStartSpinBox->setValue(0);
+    ICFinishSpinBox->setValue(0);
 
     /* Groups all radio buttons into a single group */
     QButtonGroup *ICButtonGroup = new QButtonGroup;
@@ -143,7 +154,7 @@ ConfigPage::ConfigPage(QWidget *parent)
 
     /* Adds listeners to the IC spinbox and table */
     ICGlobalLineEdit = new QLineEdit();
-    connect(ICSpinBox, SIGNAL(valueChanged(int)), this, SLOT(updateIC(int)));
+    connect(ICFinishSpinBox, SIGNAL(valueChanged(int)), this, SLOT(updateIC(int)));
     ICGlobalLineEdit->setText(tr(""));
     connect(ICTable, SIGNAL(cellChanged(int, int)), this, SLOT(updateICLineEdit(int, int)));
 

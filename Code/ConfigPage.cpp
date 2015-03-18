@@ -104,7 +104,6 @@ ConfigPage::ConfigPage(QWidget *parent)
     QRadioButton *ICCustomButton = new QRadioButton(tr("No. of ICs : "));
     QCheckBox *ICStartAtButton = new QCheckBox(tr("Start at:"));
     ICOnesButton->setChecked(true);
-    ICStartAtButton->setChecked(true);
 
 
     /* Creates the text field for custom IC list */

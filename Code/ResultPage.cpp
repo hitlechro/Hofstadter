@@ -80,15 +80,13 @@ int ResultPage::boolsToNumber(bool r0, bool r1, bool r2){
  * 2 if s3's button is checked. Returns -1 if none are checked, but this
  * should never happen.
  **/
-int ResultPage::getButtonPressed(QString s1, QString s2, QString s3, QString s4){
+int ResultPage::getButtonPressed(QString s1, QString s2, QString s3){
     if(field(s1).toBool()){
         return 0;
     }else if(field(s2).toBool()){
         return 1;
     }else if(field(s3).toBool()){
         return 2;
-    }else if(field(s4).toBool()){
-        return 3;
     }else{
         return -1;
     }
@@ -402,7 +400,7 @@ void ResultPage::initializePage(){
      ******************************/
 
     ICList = field(tr("ICList")).toString();
-    ICRadios = getButtonPressed("ICOnesButton", "ICTwoButton", "ICCustomButton", "ICStartAtButton");
+    ICRadios = getButtonPressed("ICOnesButton", "ICTwoButton", "ICCustomButton");
             //boolsToNumber(field("ICOnesButton").toBool(), field("ICTwoButton").toBool(), field("ICCustomButton").toBool());
 
     QLabel *ICLabel = new QLabel(tr("ICs:"));
@@ -851,16 +849,16 @@ bool ResultPage::violatesFilter(FilterOptions fo, Sequence S){
  */
 void ResultPage::importFilterOptions(){
     /* Imports values from radio buttons */
-    filterRadios_0 = getButtonPressed("filterRadioButton_00","filterRadioButton_01","filterRadioButton_02","filterRadioButton_03");
+    filterRadios_0 = getButtonPressed("filterRadioButton_00","filterRadioButton_01","filterRadioButton_02");
             //boolsToNumber(field("filterRadioButton_00").toBool(), field("filterRadioButton_01").toBool(), field("filterRadioButton_02").toBool());
-    filterRadios_1 = getButtonPressed("filterRadioButton_10","filterRadioButton_11","filterRadioButton_12","filterRadioButton_13");
-    filterRadios_2 = getButtonPressed("filterRadioButton_20","filterRadioButton_21","filterRadioButton_22","filterRadioButton_23");
-    filterRadios_3 = getButtonPressed("filterRadioButton_30","filterRadioButton_31","filterRadioButton_32","filterRadioButton_33");
-    filterRadios_4 = getButtonPressed("filterRadioButton_40","filterRadioButton_41","filterRadioButton_42","filterRadioButton_43");
-    filterRadios_5 = getButtonPressed("filterRadioButton_50","filterRadioButton_51","filterRadioButton_52","filterRadioButton_53");
-    filterRadios_6 = getButtonPressed("filterRadioButton_60","filterRadioButton_61","filterRadioButton_62","filterRadioButton_63");
-    filterRadios_7 = getButtonPressed("filterRadioButton_70","filterRadioButton_71","filterRadioButton_72","filterRadioButton_73");
-    filterRadios_8 = getButtonPressed("filterRadioButton_80","filterRadioButton_81","filterRadioButton_82","filterRadioButton_83");
+    filterRadios_1 = getButtonPressed("filterRadioButton_10","filterRadioButton_11","filterRadioButton_12");
+    filterRadios_2 = getButtonPressed("filterRadioButton_20","filterRadioButton_21","filterRadioButton_22");
+    filterRadios_3 = getButtonPressed("filterRadioButton_30","filterRadioButton_31","filterRadioButton_32");
+    filterRadios_4 = getButtonPressed("filterRadioButton_40","filterRadioButton_41","filterRadioButton_42");
+    filterRadios_5 = getButtonPressed("filterRadioButton_50","filterRadioButton_51","filterRadioButton_52");
+    filterRadios_6 = getButtonPressed("filterRadioButton_60","filterRadioButton_61","filterRadioButton_62");
+    filterRadios_7 = getButtonPressed("filterRadioButton_70","filterRadioButton_71","filterRadioButton_72");
+    filterRadios_8 = getButtonPressed("filterRadioButton_80","filterRadioButton_81","filterRadioButton_82");
 
     /* Imports all number values */
     filterLiveUntil = field("filterLiveUntil").toInt();

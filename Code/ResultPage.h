@@ -33,7 +33,7 @@ class ResultPage : public QWizardPage
 public:
     ResultPage(QWidget *parent=0);
     int boolsToNumber(bool r0, bool r1, bool r2);
-    int getButtonPressed(QString s1, QString s2, QString s3, QString s4);
+    int getButtonPressed(QString s1, QString s2, QString s3);
     void cleanupPage();
 
     QString paraList;

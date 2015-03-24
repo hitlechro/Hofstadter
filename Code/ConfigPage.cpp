@@ -154,7 +154,8 @@ ConfigPage::ConfigPage(QWidget *parent)
 
     /* Adds listeners to the IC spinbox and table */
     ICGlobalLineEdit = new QLineEdit();
-    connect(ICFinishSpinBox, SIGNAL(valueChanged(int)), this, SLOT(updateIC(int)));
+    connect(ICStartSpinBox, SIGNAL(valueChanged(int)), this, SLOT(updateICStart(int)));
+    connect(ICFinishSpinBox, SIGNAL(valueChanged(int)), this, SLOT(updateICFinish(int)));
     ICGlobalLineEdit->setText(tr(""));
     connect(ICTable, SIGNAL(cellChanged(int, int)), this, SLOT(updateICLineEdit(int, int)));
 
@@ -540,40 +541,101 @@ void ConfigPage::removeExtraConstraint()
 }
 
 /** Update the number of initial conditions.
- * @param noIC The number of initial conditions that will exist after this
+ * @param finishIndex The largest index
  * function finishes executing
  */
-void ConfigPage::updateIC(int noIC)
+void ConfigPage::updateICFinish(int finishIndex)
 {
-    //int noIC = ICSpinBox->value();
+    //int finishIndex = ICSpinBox->value();
     ICGlobalLineEdit->setText(tr(""));
 
+    int currMaxInd;
     int row = ICTable->rowCount();
+    if (row == 0) {
+        currMaxInd = 0;
+    } else {
+        currMaxInd = ICTable->item(row-1,0)->text().split("(")[1].split(")")[0].toInt();
+    }
+
     /* If the number of ICs increases... */
-    if (noIC > row){
-        for (int i = row; i < noIC; i++){
-            /* Increase the number of rows */
-            ICTable->setRowCount(i + 1);
+    if (finishIndex > currMaxInd){
 
-            /* Add an item to the table, make it editable */
-            QTableWidgetItem *ICItem = new QTableWidgetItem(tr("R(%1)").arg(i+1)); // ???
-            ICItem->setFlags(Qt::ItemIsEditable);
-            ICTable->setItem(i, 0, ICItem);
+        /* we need to know how many rows we're adding*/
+        int rowsToAdd = finishIndex-currMaxInd;
 
-            /* Set the value of that IC to 1 */
-            QTableWidgetItem *ICValue = new QTableWidgetItem(tr("1"));
-            ICTable->setItem(i, 1, ICValue);
+        /* Increase the number of rows */
+        for (int i = row; i < row+rowsToAdd; i++){
+
+            ICTable->insertRow(i);
+            setNewRowValues(i, (currMaxInd+1)+(i-row));
+
         }
     } else {
-        /* If the number of IC's decreases, just truncate the list */
-        ICTable->setRowCount(noIC);
+        /* we need to know how many rows we're removing*/
+        int currMinInd = ICTable->item(0,0)->text().split("(")[1].split(")")[0].toInt();
+        int rowsNeeded = finishIndex-currMinInd+1;
+        int rowsToRemove = row - rowsNeeded;
+
+        for (int i = 0; i < rowsToRemove; i++){
+            ICTable->removeRow(rowsNeeded);
+        }
         updateICLineEdit();
     }
     /* Resize the table */
     ICTable->resizeRowsToContents();
 }
 
+/** Update the number of initial conditions.
+ * @param finishIndex The smallest index
+ * function finishes executing
+ */
+void ConfigPage::updateICStart(int startIndex)
+{
+    //int startIndex = ICSpinBox->value();
+    ICGlobalLineEdit->setText(tr(""));
 
+    int currMinInd = ICTable->item(0,0)->text().split("(")[1].split(")")[0].toInt();
+
+    /* If the number of ICs increases... */
+    if (startIndex < currMinInd){
+
+        /* we need to know how many rows we're adding*/
+        int rowsToAdd = currMinInd-startIndex;
+
+        /* we need to insert newRows rows to the beginning starting at currMindInd-1,
+         * currMinInd-2, ..., currMinInd-newRows */
+        for (int i = currMinInd; i > currMinInd-rowsToAdd; i--){
+
+            /* Append an item to the table, make it editable */
+            ICTable->insertRow(0);
+            setNewRowValues(0, i-1);
+
+        }
+    } else {
+
+        /* we need to know how many rows we're removing*/
+        int rowsToRemove = startIndex-currMinInd;
+
+        for (int i = currMinInd; i > currMinInd-rowsToRemove; i--){
+            ICTable->removeRow(0);
+        }
+        updateICLineEdit();
+    }
+
+    /* Resize the table */
+    ICTable->resizeRowsToContents();
+}
+
+void ConfigPage::setNewRowValues(int rowInd, int arg)
+{
+    QTableWidgetItem *ICItem = new QTableWidgetItem(tr("R(%1)").arg(arg)); // create a row with string R(i+1)
+    ICItem->setFlags(Qt::ItemIsEditable);
+    ICTable->setItem(rowInd, 0, ICItem);
+
+    /* Set the value of that IC to 1 */
+    QTableWidgetItem *ICValue = new QTableWidgetItem(tr("1"));
+    ICTable->setItem(rowInd, 1, ICValue);
+}
 
 void ConfigPage::updateParaLineEdit()
 {

@@ -59,7 +59,9 @@ public slots:
     void addExtraConstraint();
     void removeExtraConstraint();
 
-    void updateIC(int noIC);
+    void updateICStart(int startIndex);
+    void updateICFinish(int endIndex);
+    void setNewRowValues(int rowInd, int arg);
     void updateParaLineEdit();
     void updateICLineEdit(int r=0, int c=1);
 

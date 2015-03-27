@@ -62,13 +62,15 @@ void Sequence::compute(const unsigned int n){
     //vector<string> postfix = c.toPostfix(form, false);
 
     int e;
+    vector<string> tokenForm = c.tokenize(form);
+
     /* e == ESYNTAX if there was a syntax error
        e == EINDEX if the index is out of bounds (too high or < 0)
        otherwise e is the resulting value */
     for (int i = R.size(); i <= n; i++){
         //cout << "n=" << i;
         try{
-            e = c.evaluate(i, R, c.tokenize(form));
+            e = c.evaluate(i, R, tokenForm);
             if(e < 0){
                 die = true;
                 deathTime = i;

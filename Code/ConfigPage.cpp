@@ -119,8 +119,8 @@ ConfigPage::ConfigPage(QWidget *parent)
     ICFinishSpinBox->setRange(-32767, 32767);
 
     /* Set default spinbox selected */
-    ICStartSpinBox->setValue(0);
-    ICFinishSpinBox->setValue(0);
+    ICStartSpinBox->setValue(1);
+    ICFinishSpinBox->setValue(1);
 
     /* Groups all radio buttons into a single group */
     QButtonGroup *ICButtonGroup = new QButtonGroup;
@@ -171,6 +171,10 @@ ConfigPage::ConfigPage(QWidget *parent)
     QHBoxLayout *paraICLayout = new QHBoxLayout;
     paraICLayout->addWidget(paraGroupBox);
     paraICLayout->addWidget(ICGroupBox);
+
+    /* Insert a default row into the table */
+    ICTable->insertRow(0);
+    setNewRowValues(0, 1);
 
 
    /*******************************

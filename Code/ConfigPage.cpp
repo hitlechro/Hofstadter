@@ -114,9 +114,10 @@ ConfigPage::ConfigPage(QWidget *parent)
     ICCustomLayout->addWidget(ICStartSpinBox);
     ICCustomLayout->addWidget(ICFinishSpinBox);
 
-    /* Set spinbox range */
-    ICStartSpinBox->setRange(-32767, 32767);
-    ICFinishSpinBox->setRange(-32767, 32767);
+    /* Set spinbox range -- should ensure ICStartSpinBox never
+     * goes higher than ICFinishSpinBox and vice versa */
+    ICStartSpinBox->setRange(-32767, 1);
+    ICFinishSpinBox->setRange(1, 32767);
 
     /* Set initial values of spinboxes */
     ICStartSpinBox->setValue(1);
@@ -589,6 +590,10 @@ void ConfigPage::updateICFinish(int finishIndex)
     }
     /* Resize the table */
     ICTable->resizeRowsToContents();
+
+    /* We need to ensure the ICFinishSpinBox can go no lower than
+     * ICStartSpinBox's current value */
+    ICStartSpinBox->setMaximum(finishIndex);
 }
 
 /** Update the number of initial conditions.
@@ -630,6 +635,10 @@ void ConfigPage::updateICStart(int startIndex)
 
     /* Resize the table */
     ICTable->resizeRowsToContents();
+
+    /* We need to ensure the ICFinishSpinBox can go no lower than
+     * ICStartSpinBox's current value */
+    ICFinishSpinBox->setMinimum(startIndex);
 }
 
 void ConfigPage::setNewRowValues(int rowInd, int arg)

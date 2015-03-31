@@ -207,18 +207,26 @@ int Calculator::evaluate(int n, vector<int>& R, vector<string> s, signed int n_0
     /* Performs all exponent operations */
     for(int i = 0; i < s.size(); i++){
         if(s[i] == "^"){
-            s[i-1] = toString((double) pow(toNumber(s[i-1]), (double) toNumber(s[i+1])));
-            s.erase(s.begin()+i, s.begin()+i+2);
-            i-=2;
+            if (exponentiation_is_safe(toNumber(s[i-1]), toNumber(s[i+1]))) {
+                s[i-1] = toString((double) pow(toNumber(s[i-1]), (double) toNumber(s[i+1])));
+                s.erase(s.begin()+i, s.begin()+i+2);
+                i-=2;
+            } else {
+                throw EFLOW;
+            }
         }
     }
 
     /* Performs all multiplication and division */
     for(int i = 0; i < s.size(); i++){
         if(s[i] == "*"){
-            s[i-1] = toString(toNumber(s[i-1]) * toNumber(s[i+1]));
-            s.erase(s.begin()+i, s.begin()+i+2);
-            i-=2;
+            if (multiplication_is_safe(toNumber(s[i-1]), toNumber(s[i+1]))) {
+                s[i-1] = toString(toNumber(s[i-1]) * toNumber(s[i+1]));
+                s.erase(s.begin()+i, s.begin()+i+2);
+                i-=2;
+            } else {
+                throw EFLOW;
+            }
         }else if(s[i] == "/"){
             //todo: check for 0!
             s[i-1] = toString(toNumber(s[i-1]) / toNumber(s[i+1]));
@@ -232,10 +240,14 @@ int Calculator::evaluate(int n, vector<int>& R, vector<string> s, signed int n_0
     return that int */
     for(int i = 0; i < s.size(); i++){
         if(s[i] == "+"){
-            s[i-1] = toString(toNumber(s[i-1]) + toNumber(s[i+1]));
-            s.erase(s.begin()+i, s.begin()+i+2);
-            i-=2;
-        }else if(s[i] == "-"){
+            if (addition_is_safe(toNumber(s[i-1]), toNumber(s[i+1]))) {
+                s[i-1] = toString(toNumber(s[i-1]) + toNumber(s[i+1]));
+                s.erase(s.begin()+i, s.begin()+i+2);
+                i-=2;
+            } else {
+                throw EFLOW;
+            }
+        } else if(s[i] == "-") {
             s[i-1] = toString(toNumber(s[i-1]) - toNumber(s[i+1]));
             s.erase(s.begin()+i, s.begin()+i+2);
             i-=2;
@@ -543,4 +555,28 @@ vector<string> Calculator::getParameterNames(string s){
     }
     paraNames = names;
     return names;
+}
+
+bool Calculator::addition_is_safe(int a, int b) {
+    size_t a_bits=log(a), b_bits=log(b);
+    return (a_bits<32 && b_bits<32);
+}
+
+bool Calculator::multiplication_is_safe(long a, long b) {
+    size_t a_bits=log(a), b_bits=log(b);
+    return (a_bits+b_bits<=64);
+}
+
+bool Calculator::exponentiation_is_safe(long a, long b) {
+    size_t a_bits=log(a);
+    return (a_bits*b<=64);
+}
+
+size_t Calculator::log(long a) {
+    size_t bits=0;
+    while (a!=0) {
+        ++bits;
+        a>>=1;
+    };
+    return bits;
 }

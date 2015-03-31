@@ -107,10 +107,10 @@ void Sequence::compute(const unsigned int n){
             }
             R.push_back(e);
         }catch(int E){
-            if(E == EINDEX){
+            if((E == EINDEX) || (E == EFLOW)){
                 die = true;
                 deathTime = i;
-                break;
+                break; // INCLUDE A MESSAGE OR SOME INDICATION
             }else if (E == ESYNTAX){
                 // handle syntax error
             }

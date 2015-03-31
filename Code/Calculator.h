@@ -50,6 +50,12 @@ class Calculator {
         static void init();
         static vector<string> getParameterNames(string s);
 
+        /* Functions for detecting Overflow and Underflow */
+        bool addition_is_safe(int a, int b);
+        bool multiplication_is_safe(long a, long b);
+        bool exponentiation_is_safe(long a, long b);
+        size_t log(long a);
+
 };
 
 #endif // CALCULATOR_H

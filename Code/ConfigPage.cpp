@@ -118,7 +118,7 @@ ConfigPage::ConfigPage(QWidget *parent)
     ICStartSpinBox->setRange(-32767, 32767);
     ICFinishSpinBox->setRange(-32767, 32767);
 
-    /* Set default spinbox selected */
+    /* Set initial values of spinboxes */
     ICStartSpinBox->setValue(1);
     ICFinishSpinBox->setValue(1);
 

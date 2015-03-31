@@ -165,6 +165,8 @@ ConfigPage::ConfigPage(QWidget *parent)
     registerField(tr("ICTwoButton"), ICTwoButton);
     registerField(tr("ICCustomButton"), ICCustomButton);
 
+    registerField(tr("startIndex"), ICStartSpinBox);
+
     /* Merges the parameters and IC into a single layout */
     QHBoxLayout *paraICLayout = new QHBoxLayout;
     paraICLayout->addWidget(paraGroupBox);

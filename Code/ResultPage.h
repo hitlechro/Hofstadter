@@ -63,6 +63,9 @@ public:
     QString filterFrequencyMatch;
     QString filterFrequencyNotMatch;
 
+    /** Holds the index of the first IC */
+    signed int startIndex;
+
     //comments denote position in original code, in case something
     //stops working and needs to be fixed
     /** Toggle for displaying the sequence */

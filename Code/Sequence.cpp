@@ -8,9 +8,38 @@
 #include "errors.h"
 #include "Calculator.h"
 
+Sequence::Sequence(string sform, Vector& paraValue, Vector& IC, vector<string>& sconstraint_list, signed int sStartIndex):
+    constraint_list(sconstraint_list), c(paraValue), startIndex(sStartIndex) {
+
+    //c = Calculator(paraValue);
+    Calculator::getParameterNames(sform);
+    form = sform;
+    R.push_back(-1);
+    for (int i = 0; i < IC.size(); i++){
+        //cout << "IC[i] = " << IC[i] << endl;
+
+
+        R.push_back(IC[i]);
+    }
+    c.saveParameters(form); // initialize and "save" the paramters
+
+    slow = true;
+    slowEventually = true;
+    slowProportion = 0;
+    firstNotSlow = -1;
+    deathTime = -1;
+    die = false;
+    largestGeneration = 0;
+    containSubstring = false;
+    containSubsequence = false;
+    frequencyMatch = false;
+}
 
 Sequence::Sequence(string sform, Vector& paraValue, Vector& IC, vector<string>& sconstraint_list):
     constraint_list(sconstraint_list), c(paraValue) {
+
+    /* Here, we assume that the first IC has index 1 */
+    startIndex = 1;
 
     //c = Calculator(paraValue);
     Calculator::getParameterNames(sform);
@@ -42,7 +71,7 @@ Sequence::Sequence(string sform, Vector& paraValue, Vector& IC, vector<string>& 
   */
 bool Sequence::dieImmediately(void){
     try{
-        if(c.evaluate(R.size(), R, c.tokenize(form)) < 0){
+        if(c.evaluate(R.size()-(1-startIndex), R, c.tokenize(form), startIndex) < startIndex){
             return true;
         }
         /* e is -1 if evaluate returns an invalid index */
@@ -67,10 +96,10 @@ void Sequence::compute(const unsigned int n){
     /* e == ESYNTAX if there was a syntax error
        e == EINDEX if the index is out of bounds (too high or < 0)
        otherwise e is the resulting value */
-    for (int i = R.size(); i <= n; i++){
+    for (int i = R.size()-(1-startIndex); i <= n; i++){
         //cout << "n=" << i;
         try{
-            e = c.evaluate(i, R, tokenForm);
+            e = c.evaluate(i, R, tokenForm, startIndex);
             if(e < 0){
                 die = true;
                 deathTime = i;
@@ -86,7 +115,7 @@ void Sequence::compute(const unsigned int n){
                 // handle syntax error
             }
         }
-        /*e = c.evaluate(i, R, c.tokenize(form));
+        /*e = c.evaluate(i, R, c.tokenize(form), startIndex);
         // if e is an error code (or somehow negative)
         if(e == EINDEX || e == ESYNTAX || e < 0){
             die = true;
@@ -198,13 +227,12 @@ void Sequence::analyse(Vector& MIC, int interval, string expression,
         computeGeneration(MIC);
     cout << "MIC generated" << endl;
 
-    computeSlowness(interval);
-    computefrequency();
-
     //checkContainSubstring(temp);
     //checkContainSubsequence(temp);
 
     /* so.FLAG is true if that flag is set to true */
+    if (so.slow) computeSlowness(interval);
+    if (so.frequency) computefrequency();
     if (so.twoRnMinusn) computetwoRnMinusn();
     if (so.RnDivn) computeRnDivn();
     if (so.additional) computeAddition(expression);
@@ -302,7 +330,7 @@ void Sequence::computeGeneration(Vector& IC){
     int tmp;
     for (int i = IC.size()+1; i < R.size(); i++){
         try{
-            tmp = c.evaluate(i, R, c.tokenize(spot));
+            tmp = c.evaluate(i, R, c.tokenize(spot), startIndex);
             if(tmp < 0){
                 break;
             }
@@ -392,10 +420,10 @@ bool Sequence::checkContainSubsequence(Vector subsequence){
 //todo: error handling
 void Sequence::computeAddition(string pression){
     if (pression.find("n") == -1){
-        addition.push_back( c.evaluate(0, R, c.tokenize(pression)) );
+        addition.push_back( c.evaluate(0, R, c.tokenize(pression), startIndex) );
     } else {
         for (int i = 0; i < R.size(); i++)
-            addition.push_back( c.evaluate(i, R, c.tokenize(pression)) );
+            addition.push_back( c.evaluate(i, R, c.tokenize(pression), startIndex) );
     }
 }
 

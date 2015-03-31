@@ -39,8 +39,9 @@ class Calculator {
         int parseOperand(string s);
         static int _parseOperand(string s); /* todo: paramap*/
         static int toNumber(string s);
-        int evaluate(int n, vector<int>& R, vector<string> expression);
-        int stringEvaluate(int n, vector<int>& R, string expression);
+        int evaluate(int n, vector<int>& R, vector<string> s, signed int n_0);
+        int evaluate(int n, vector<int>& R, vector<string> s);
+        int stringEvaluate(int n, vector<int>& R, string expression, signed int n_0);
         int algebraEvaluate(string expression);
         static string toString(int n);
         /*static*/ void saveParameters(string s);

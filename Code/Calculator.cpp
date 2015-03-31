@@ -149,13 +149,27 @@ int Calculator::toNumber(string s){
   * @return The value the expression evaluates to
   */
 int Calculator::evaluate(int n, vector<int>& R, vector<string> s){
+    evaluate(n, R, s, 1);
+}
+
+/**
+  * Evaluates a tokenized expression
+  * @param n The value to use for n
+  * @param R A vector containing all values R(x), x < n
+  * @param s The tokenized expression
+  * @param n_0 The index of the first IC.
+  * @return The value the expression evaluates to
+  */
+int Calculator::evaluate(int n, vector<int>& R, vector<string> s, signed int n_0){
 
     /* if n is one of the IC, return R(n) */
     /* if n is a negative index, return an error */
-    if(n < 1){
+
+    int index = n+(1-n_0);
+    if(n < n_0){
         throw EINDEX;
-    }else if(n < R.size()) {
-        return R.at(n);
+    }else if(index < R.size()) {
+        return R.at(index);
     }	 // todo: is this reliable?
 
     // used later in the function.
@@ -166,7 +180,7 @@ int Calculator::evaluate(int n, vector<int>& R, vector<string> s){
     This is recursive, so all subexpressions are evaluated as well. */
     //int ret = 0;
     if(s.size() == 1){
-        s[0] = toString(stringEvaluate(n, R, s[0]));
+        s[0] = toString(stringEvaluate(n, R, s[0], n_0));
     }else{
         for (int i = 0; i < s.size(); i++){
             /* If s[i] is a variable, treat it as one */
@@ -174,7 +188,7 @@ int Calculator::evaluate(int n, vector<int>& R, vector<string> s){
                 if(s[i] == "n"){
                     s[i] = toString(n);
                 }else {
-                    int eval = evaluate(n, R, tokenize(s[i]));
+                    int eval = evaluate(n, R, tokenize(s[i]), n_0);
                     s[i] = toString(eval);
                 }
             }
@@ -229,6 +243,7 @@ int Calculator::evaluate(int n, vector<int>& R, vector<string> s){
     }
 
     // todo: ECODE
+    // handle bad syntax
     if (s.size() != 1){
         throw ESYNTAX;
     }
@@ -248,14 +263,15 @@ int Calculator::evaluate(int n, vector<int>& R, vector<string> s){
   * If an algebraic expression is passed (eg: 4*3+2), an error will occur.
   * @param s The string to evaluate
   * @param n The value of n
+  * @param n_0 The index of the first IC
   * @return The value that s evaluates too
   */
-int Calculator::stringEvaluate(int n, vector<int> &R, string s){
+int Calculator::stringEvaluate(int n, vector<int> &R, string s, signed int n_0){
     if (s == "n"){
         return n;
     }else if(s.substr(0, 1) == "R"){
         string sub = s.substr(2, s.length()-3);
-        int index = evaluate(n, R, tokenize(sub));
+        int index = evaluate(n, R, tokenize(sub), n_0) + (1-n_0); // the 2nd term returns the correct index
         if(index < 1 || index >= R.size()){
             throw EINDEX;  // why not throw it?
         }else{

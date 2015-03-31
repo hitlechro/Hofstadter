@@ -682,7 +682,7 @@ void ResultPage::initializePage(){
         }else{
             for(uint j = 0; j < IC_list.size(); j++){
                 progress.setValue(IC_list.size()*i + j);
-                Sequence S = Sequence(recursion, para_list[i], IC_list.at(j), constraintList);
+                Sequence S = Sequence(recursion, para_list[i], IC_list.at(j), constraintList, startIndex);
                 if(analyzeSequence(&S, so, fo, GS_list)){
                     addToTable(S, para_list[i], IC_list.at(j), mainTable, row, so);
                     row++;
@@ -748,6 +748,10 @@ void ResultPage::cleanupPage(){
  * Imports data from the options page so it can be used by the main method
  */
 void ResultPage::importOptionsPage(){
+
+    /* Gets the index of the first IC  */
+    startIndex = field("startIndex").toInt();
+
     /* Sets the toggles for the summaries to the appropriate value,
       depending on the corresponding checkbox on the options page */
     showSequenceToggle = field("showSequenceCheckBox").toBool();

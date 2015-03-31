@@ -15,6 +15,8 @@ class Sequence {
     public:
         /** The Calculator being used to evaluate this sequence */
         Calculator c;
+        /* Holds the index of the first IC */
+        signed int startIndex;
         /* todo: document me */
         Vector R, twoRnMinusn, rnMinusRn;
                 Vector M, genStart, genEnd, frequency, addition;
@@ -40,6 +42,7 @@ class Sequence {
         double slowProportion;
 
         /* Documented in Sequence.cpp */
+        Sequence(string sform, Vector& paraValue, Vector& IC, vector<string>& sconstraint_list, signed int sStartIndex);
         Sequence(string sform, Vector& paraValue, Vector& IC, vector<string>& sconstraint_list);
         void compute(const unsigned int n); // generate the sequence up to n
         void print(void);

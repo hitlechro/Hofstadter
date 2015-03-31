@@ -101,7 +101,7 @@ ConfigPage::ConfigPage(QWidget *parent)
     /* Creates the radio buttons and makes "All ones" the default */
     QRadioButton *ICOnesButton = new QRadioButton(tr("All Ones"));
     QRadioButton *ICTwoButton= new QRadioButton(tr("All Ones followed by a Two"));
-    QRadioButton *ICCustomButton = new QRadioButton(tr("No. of ICs : "));
+    QRadioButton *ICCustomButton = new QRadioButton(tr("Range of ICs : "));
 
     /* Set default radio button selected */
     ICOnesButton->setChecked(true);

@@ -23,7 +23,7 @@ map<string, int> Calculator::paraMap = map<string, int>();
  * @returns true iff s is one of the above operators
  */
 bool Calculator::isOperator(string s){
-    return (s == "+" || s == "-" || s == "*" || s == "/");
+    return (s == "+" || s == "-" || s == "*" || s == "/" || s == "^");
             /*s == "SUM" || s == "[" || s == "]"*/ // FIXME
 } 
 

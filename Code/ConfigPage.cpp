@@ -102,6 +102,7 @@ ConfigPage::ConfigPage(QWidget *parent)
     QRadioButton *ICOnesButton = new QRadioButton(tr("All Ones"));
     QRadioButton *ICTwoButton= new QRadioButton(tr("All Ones followed by a Two"));
     QRadioButton *ICCustomButton = new QRadioButton(tr("Range of ICs : "));
+    QCheckBox *ICAnchorButton = new QCheckBox(tr("For n below the range of ICs, set R(n)="));
 
     /* Set default radio button selected */
     ICOnesButton->setChecked(true);
@@ -123,6 +124,16 @@ ConfigPage::ConfigPage(QWidget *parent)
     ICStartSpinBox->setValue(1);
     ICFinishSpinBox->setValue(1);
 
+    /* Creates the spinbox that will specify the anchored value */
+    ICAnchorSpinBox = new QSpinBox;
+    QHBoxLayout *ICAnchorLayout = new QHBoxLayout;
+    ICAnchorLayout->addWidget(ICAnchorButton);
+    ICAnchorLayout->addWidget(ICAnchorSpinBox);
+
+    /* Set the spinbox range for the Anchor button
+     * it can be any value, really */
+    ICAnchorSpinBox->setRange(-32767, 32767);
+
     /* Groups all radio buttons into a single group */
     QButtonGroup *ICButtonGroup = new QButtonGroup;
     ICButtonGroup->addButton(ICOnesButton);
@@ -141,6 +152,7 @@ ConfigPage::ConfigPage(QWidget *parent)
     ICButtonlayout->addWidget(ICOnesButton);
     ICButtonlayout->addWidget(ICTwoButton);
     ICButtonlayout->addLayout(ICCustomLayout);
+    ICButtonlayout->addLayout(ICAnchorLayout);
 
     /* Puts the button layout and the table into a single layout */
     QHBoxLayout *ICLayout = new QHBoxLayout;

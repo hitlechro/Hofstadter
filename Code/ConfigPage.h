@@ -44,6 +44,7 @@ private:
 
     QSpinBox *ICStartSpinBox;
     QSpinBox *ICFinishSpinBox;
+    QSpinBox *ICAnchorSpinBox;
     QTableWidget *ICTable;
     QLineEdit *ICGlobalLineEdit;
     QSpinBox *GSSpinBox;

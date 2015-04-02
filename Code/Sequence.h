@@ -48,6 +48,7 @@ class Sequence {
         /* Documented in Sequence.cpp */
         Sequence(string sform, Vector& paraValue, Vector& IC, vector<string>& sconstraint_list, bool sAnchor, int sAnchorValue, signed int sStartIndex);
         Sequence(string sform, Vector& paraValue, Vector& IC, vector<string>& sconstraint_list, bool sAnchor, int sAnchorValue);
+        void init(string sform, Vector& IC);
         void compute(const unsigned int n); // generate the sequence up to n
         void print(void);
         bool satisfiedConstraint(void);

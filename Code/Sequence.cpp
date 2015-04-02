@@ -2,56 +2,32 @@
 #include <string>
 #include <iostream>
 #include <algorithm>
-//#include "SummaryOptions.h"
-//#include "FilterOptions.h"
 #include "Sequence.h"
 #include "errors.h"
 #include "Calculator.h"
 
-Sequence::Sequence(string sform, Vector& paraValue, Vector& IC, vector<string>& sconstraint_list, bool sAnchor, int sAnchorValue, signed int sStartIndex):
+Sequence::Sequence(string sform, Vector& paraValue, Vector& IC,
+                   vector<string>& sconstraint_list, bool sAnchor, int sAnchorValue,
+                   signed int sStartIndex) :
     constraint_list(sconstraint_list), c(paraValue), anchor(sAnchor), anchorValue(sAnchorValue), startIndex(sStartIndex) {
-
-    //c = Calculator(paraValue);
-    Calculator::getParameterNames(sform);
-    form = sform;
-    R.push_back(-1);
-    for (int i = 0; i < IC.size(); i++){
-        //cout << "IC[i] = " << IC[i] << endl;
-
-
-        R.push_back(IC[i]);
-    }
-    c.saveParameters(form); // initialize and "save" the paramters
-
-    slow = true;
-    slowEventually = true;
-    slowProportion = 0;
-    firstNotSlow = -1;
-    deathTime = -1;
-    die = false;
-    largestGeneration = 0;
-    containSubstring = false;
-    containSubsequence = false;
-    frequencyMatch = false;
+    init(sform, IC);
 }
 
-Sequence::Sequence(string sform, Vector& paraValue, Vector& IC, vector<string>& sconstraint_list, bool sAnchor, int sAnchorValue):
-    constraint_list(sconstraint_list), c(paraValue), anchor(sAnchor), anchorValue(sAnchorValue) {
+Sequence::Sequence(string sform, Vector& paraValue, Vector& IC,
+                   vector<string>& sconstraint_list, bool sAnchor, int sAnchorValue) :
+    constraint_list(sconstraint_list), c(paraValue), anchor(sAnchor), anchorValue(sAnchorValue), startIndex(1) {
+    init(sform, IC);
+}
 
-    /* Here, we assume that the first IC has index 1 */
-    startIndex = 1;
+void Sequence::init(string sform, Vector& IC) {
 
-    //c = Calculator(paraValue);
     Calculator::getParameterNames(sform);
     form = sform;
     R.push_back(-1);
     for (int i = 0; i < IC.size(); i++){
-        //cout << "IC[i] = " << IC[i] << endl;
-
-
         R.push_back(IC[i]);
     }
-    c.saveParameters(form); // initialize and "save" the paramters
+    c.saveParameters(form); // initialize and "save" the parameters
 
     slow = true;
     slowEventually = true;
@@ -67,20 +43,13 @@ Sequence::Sequence(string sform, Vector& paraValue, Vector& IC, vector<string>& 
 
 /**
   Determines if the current sequence will die on the next iteration
+  This appears to be useless, but it's not a priority to decide if
+  I should delete this, yet.
+
   @return true if it dies immediately, false otherwise
   */
 bool Sequence::dieImmediately(void){
-//    if (!anchor) {
-//        try{
-//            if(c.evaluate(R.size()-(1-startIndex), R, c.tokenize(form), anchor, anchorValue, startIndex) < startIndex){
-//                return true;
-//            }
-//            /* e is -1 if evaluate returns an invalid index */
-            return false;
-//        }catch (int E){
-//            return true; // if there's any error, return true;
-//        }
-//    }
+    return false;
 }
 
 
@@ -90,30 +59,16 @@ bool Sequence::dieImmediately(void){
   @param n The number of iterations to calculate
   */
 void Sequence::compute(const unsigned int n){
-    //vector<string> postfix = c.toPostfix(form, false);
-
     int e;
     vector<string> tokenForm = c.tokenize(form);
 
     /* e == ESYNTAX if there was a syntax error
        e == EINDEX if the index is out of bounds (too high or < startIndex)
        otherwise e is the resulting value */
-    for (int i = R.size()-(1-startIndex); i <= n; i++){
-        //cout << "n=" << i;
+    for (int i = R.size()-(1-startIndex); i <= n; i++){                     //cout << "n=" << i;
         try{
             e = c.evaluate(i, R, tokenForm, anchor, anchorValue, startIndex);
             R.push_back(e);
-//            if (e < startIndex) {
-//                if (!anchor) {
-//                    die = true;
-//                    deathTime = i;
-//                    break;
-//                } else {
-//                    R.push_back(anchorValue);
-//                }
-//            } else {
-//                R.push_back(e);
-//            }
         }catch(int E){
             if ((E == EINDEX) || (E == EFLOW)) {
                 die = true;
@@ -123,15 +78,6 @@ void Sequence::compute(const unsigned int n){
                 // handle syntax error
             }
         }
-        /*e = c.evaluate(i, R, c.tokenize(form), startIndex);
-        // if e is an error code (or somehow negative)
-        if(e == EINDEX || e == ESYNTAX || e < 0){
-            die = true;
-            deathTime = i;
-            break;
-        }else{
-            R.push_back(e);
-        }*/
     }
 }
 

@@ -566,7 +566,7 @@ vector<string> Calculator::getParameterNames(string s){
 bool Calculator::addition_is_safe(int a, int b) {
     if ((a>=0)||(b>=0)) {
         size_t a_bits=log(a), b_bits=log(b);
-        return (a_bits<32 && b_bits<32);
+        return (a_bits<31 && b_bits<31);
     } else {
         return true;
     }
@@ -575,7 +575,7 @@ bool Calculator::addition_is_safe(int a, int b) {
 bool Calculator::multiplication_is_safe(long a, long b) {
     if ((a>=0)||(b>=0)) {
         size_t a_bits=log(a), b_bits=log(b);
-        return (a_bits+b_bits<=64);
+        return (a_bits+b_bits<=62);
     } else {
         return true;
     }
@@ -584,7 +584,7 @@ bool Calculator::multiplication_is_safe(long a, long b) {
 bool Calculator::exponentiation_is_safe(long a, long b) {
     if (a>=0) {
         size_t a_bits=log(a);
-        return (a_bits*b<=64);
+        return (a_bits*b<=62);
     } else {
         return true;
     }

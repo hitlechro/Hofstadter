@@ -17,6 +17,10 @@ class Sequence {
         Calculator c;
         /* Holds the index of the first IC */
         signed int startIndex;
+
+        /** If anchor is true, then when the n < startIndex, R(n)=anchorValues*/
+        bool anchor;
+        int anchorValue;
         /* todo: document me */
         Vector R, twoRnMinusn, rnMinusRn;
                 Vector M, genStart, genEnd, frequency, addition;
@@ -42,8 +46,8 @@ class Sequence {
         double slowProportion;
 
         /* Documented in Sequence.cpp */
-        Sequence(string sform, Vector& paraValue, Vector& IC, vector<string>& sconstraint_list, signed int sStartIndex);
-        Sequence(string sform, Vector& paraValue, Vector& IC, vector<string>& sconstraint_list);
+        Sequence(string sform, Vector& paraValue, Vector& IC, vector<string>& sconstraint_list, bool sAnchor, int sAnchorValue, signed int sStartIndex);
+        Sequence(string sform, Vector& paraValue, Vector& IC, vector<string>& sconstraint_list, bool sAnchor, int sAnchorValue);
         void compute(const unsigned int n); // generate the sequence up to n
         void print(void);
         bool satisfiedConstraint(void);

@@ -106,6 +106,7 @@ ConfigPage::ConfigPage(QWidget *parent)
 
     /* Set default radio button selected */
     ICOnesButton->setChecked(true);
+    ICAnchorButton->setChecked(false);
 
     /* Creates the text field for custom IC list */
     ICStartSpinBox = new QSpinBox;
@@ -177,8 +178,10 @@ ConfigPage::ConfigPage(QWidget *parent)
     registerField(tr("ICOnesButton"), ICOnesButton);
     registerField(tr("ICTwoButton"), ICTwoButton);
     registerField(tr("ICCustomButton"), ICCustomButton);
+    registerField(tr("ICAnchorButton"), ICAnchorButton);
 
     registerField(tr("startIndex"), ICStartSpinBox);
+    registerField(tr("anchorValue"), ICAnchorSpinBox);
 
     /* Merges the parameters and IC into a single layout */
     QHBoxLayout *paraICLayout = new QHBoxLayout;
@@ -496,7 +499,7 @@ void ConfigPage::initializePage(){
 
     vector<int> dummy;
     vector<string> dummyString;
-    Sequence S(field("newRecursion").toString().toStdString(), dummy, dummy, dummyString);
+    Sequence S(field("newRecursion").toString().toStdString(), dummy, dummy, dummyString, false, 1);
 
     QString paraName;   // The string with the parameter names
     /* Update the parameter table to contain the parameter names and default values (1) */

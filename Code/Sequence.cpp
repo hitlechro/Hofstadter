@@ -8,8 +8,8 @@
 #include "errors.h"
 #include "Calculator.h"
 
-Sequence::Sequence(string sform, Vector& paraValue, Vector& IC, vector<string>& sconstraint_list, signed int sStartIndex):
-    constraint_list(sconstraint_list), c(paraValue), startIndex(sStartIndex) {
+Sequence::Sequence(string sform, Vector& paraValue, Vector& IC, vector<string>& sconstraint_list, bool sAnchor, int sAnchorValue, signed int sStartIndex):
+    constraint_list(sconstraint_list), c(paraValue), anchor(sAnchor), anchorValue(sAnchorValue), startIndex(sStartIndex) {
 
     //c = Calculator(paraValue);
     Calculator::getParameterNames(sform);
@@ -35,8 +35,8 @@ Sequence::Sequence(string sform, Vector& paraValue, Vector& IC, vector<string>& 
     frequencyMatch = false;
 }
 
-Sequence::Sequence(string sform, Vector& paraValue, Vector& IC, vector<string>& sconstraint_list):
-    constraint_list(sconstraint_list), c(paraValue) {
+Sequence::Sequence(string sform, Vector& paraValue, Vector& IC, vector<string>& sconstraint_list, bool sAnchor, int sAnchorValue):
+    constraint_list(sconstraint_list), c(paraValue), anchor(sAnchor), anchorValue(sAnchorValue) {
 
     /* Here, we assume that the first IC has index 1 */
     startIndex = 1;
@@ -70,15 +70,17 @@ Sequence::Sequence(string sform, Vector& paraValue, Vector& IC, vector<string>& 
   @return true if it dies immediately, false otherwise
   */
 bool Sequence::dieImmediately(void){
-    try{
-        if(c.evaluate(R.size()-(1-startIndex), R, c.tokenize(form), startIndex) < startIndex){
-            return true;
-        }
-        /* e is -1 if evaluate returns an invalid index */
-        return false;
-    }catch (int E){
-        return true; // if there's any error, return true;
-    }
+//    if (!anchor) {
+//        try{
+//            if(c.evaluate(R.size()-(1-startIndex), R, c.tokenize(form), anchor, anchorValue, startIndex) < startIndex){
+//                return true;
+//            }
+//            /* e is -1 if evaluate returns an invalid index */
+            return false;
+//        }catch (int E){
+//            return true; // if there's any error, return true;
+//        }
+//    }
 }
 
 
@@ -94,24 +96,30 @@ void Sequence::compute(const unsigned int n){
     vector<string> tokenForm = c.tokenize(form);
 
     /* e == ESYNTAX if there was a syntax error
-       e == EINDEX if the index is out of bounds (too high or < 0)
+       e == EINDEX if the index is out of bounds (too high or < startIndex)
        otherwise e is the resulting value */
     for (int i = R.size()-(1-startIndex); i <= n; i++){
         //cout << "n=" << i;
         try{
-            e = c.evaluate(i, R, tokenForm, startIndex);
-            if(e < 0){
-                die = true;
-                deathTime = i;
-                break;
-            }
+            e = c.evaluate(i, R, tokenForm, anchor, anchorValue, startIndex);
             R.push_back(e);
+//            if (e < startIndex) {
+//                if (!anchor) {
+//                    die = true;
+//                    deathTime = i;
+//                    break;
+//                } else {
+//                    R.push_back(anchorValue);
+//                }
+//            } else {
+//                R.push_back(e);
+//            }
         }catch(int E){
-            if((E == EINDEX) || (E == EFLOW)){
+            if ((E == EINDEX) || (E == EFLOW)) {
                 die = true;
                 deathTime = i;
                 break; // INCLUDE A MESSAGE OR SOME INDICATION
-            }else if (E == ESYNTAX){
+            } else if (E == ESYNTAX){
                 // handle syntax error
             }
         }
@@ -330,7 +338,7 @@ void Sequence::computeGeneration(Vector& IC){
     int tmp;
     for (int i = IC.size()+1; i < R.size(); i++){
         try{
-            tmp = c.evaluate(i, R, c.tokenize(spot), startIndex);
+            tmp = c.evaluate(i, R, c.tokenize(spot), anchor, anchorValue, startIndex);
             if(tmp < 0){
                 break;
             }
@@ -420,10 +428,10 @@ bool Sequence::checkContainSubsequence(Vector subsequence){
 //todo: error handling
 void Sequence::computeAddition(string pression){
     if (pression.find("n") == -1){
-        addition.push_back( c.evaluate(0, R, c.tokenize(pression), startIndex) );
+        addition.push_back( c.evaluate(0, R, c.tokenize(pression), anchor, anchorValue, startIndex) );
     } else {
         for (int i = 0; i < R.size(); i++)
-            addition.push_back( c.evaluate(i, R, c.tokenize(pression), startIndex) );
+            addition.push_back( c.evaluate(i, R, c.tokenize(pression), anchor, anchorValue, startIndex) );
     }
 }
 

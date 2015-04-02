@@ -149,7 +149,7 @@ int Calculator::toNumber(string s){
   * @return The value the expression evaluates to
   */
 int Calculator::evaluate(int n, vector<int>& R, vector<string> s){
-    evaluate(n, R, s, 1);
+    evaluate(n, R, s, 0, 1, 1);
 }
 
 /**
@@ -160,14 +160,18 @@ int Calculator::evaluate(int n, vector<int>& R, vector<string> s){
   * @param n_0 The index of the first IC.
   * @return The value the expression evaluates to
   */
-int Calculator::evaluate(int n, vector<int>& R, vector<string> s, signed int n_0){
+int Calculator::evaluate(int n, vector<int>& R, vector<string> s, bool anchor, int anchorValue, signed int n_0){
 
     /* if n is one of the IC, return R(n) */
     /* if n is a negative index, return an error */
 
     int index = n+(1-n_0);
     if(n < n_0){
-        throw EINDEX;
+        if (anchor) {
+            return anchorValue;
+        } else {
+            throw EINDEX;
+        }
     }else if(index < R.size()) {
         return R.at(index);
     }	 // todo: is this reliable?
@@ -180,7 +184,7 @@ int Calculator::evaluate(int n, vector<int>& R, vector<string> s, signed int n_0
     This is recursive, so all subexpressions are evaluated as well. */
     //int ret = 0;
     if(s.size() == 1){
-        s[0] = toString(stringEvaluate(n, R, s[0], n_0));
+        s[0] = toString(stringEvaluate(n, R, s[0], anchor, anchorValue, n_0));
     }else{
         for (int i = 0; i < s.size(); i++){
             /* If s[i] is a variable, treat it as one */
@@ -188,7 +192,7 @@ int Calculator::evaluate(int n, vector<int>& R, vector<string> s, signed int n_0
                 if(s[i] == "n"){
                     s[i] = toString(n);
                 }else {
-                    int eval = evaluate(n, R, tokenize(s[i]), n_0);
+                    int eval = evaluate(n, R, tokenize(s[i]), anchor, anchorValue, n_0);
                     s[i] = toString(eval);
                 }
             }
@@ -278,15 +282,17 @@ int Calculator::evaluate(int n, vector<int>& R, vector<string> s, signed int n_0
   * @param n_0 The index of the first IC
   * @return The value that s evaluates too
   */
-int Calculator::stringEvaluate(int n, vector<int> &R, string s, signed int n_0){
+int Calculator::stringEvaluate(int n, vector<int> &R, string s, bool anchor, int anchorValue, signed int n_0){
     if (s == "n"){
         return n;
     }else if(s.substr(0, 1) == "R"){
         string sub = s.substr(2, s.length()-3);
-        int index = evaluate(n, R, tokenize(sub), n_0) + (1-n_0); // the 2nd term returns the correct index
-        if(index < 1 || index >= R.size()){
+        int index = evaluate(n, R, tokenize(sub), anchor, anchorValue, n_0) + (1-n_0); // the 2nd term returns the correct index
+        if (index < 1 && anchor) {
+            return anchorValue;
+        } else if (index < 1 || index >= R.size()){
             throw EINDEX;  // why not throw it?
-        }else{
+        } else {
             return R.at(index); //getR(toString(index));
         }
     }else {
@@ -558,18 +564,30 @@ vector<string> Calculator::getParameterNames(string s){
 }
 
 bool Calculator::addition_is_safe(int a, int b) {
-    size_t a_bits=log(a), b_bits=log(b);
-    return (a_bits<32 && b_bits<32);
+    if ((a>=0)||(b>=0)) {
+        size_t a_bits=log(a), b_bits=log(b);
+        return (a_bits<32 && b_bits<32);
+    } else {
+        return true;
+    }
 }
 
 bool Calculator::multiplication_is_safe(long a, long b) {
-    size_t a_bits=log(a), b_bits=log(b);
-    return (a_bits+b_bits<=64);
+    if ((a>=0)||(b>=0)) {
+        size_t a_bits=log(a), b_bits=log(b);
+        return (a_bits+b_bits<=64);
+    } else {
+        return true;
+    }
 }
 
 bool Calculator::exponentiation_is_safe(long a, long b) {
-    size_t a_bits=log(a);
-    return (a_bits*b<=64);
+    if (a>=0) {
+        size_t a_bits=log(a);
+        return (a_bits*b<=64);
+    } else {
+        return true;
+    }
 }
 
 size_t Calculator::log(long a) {

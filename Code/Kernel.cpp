@@ -142,17 +142,23 @@ static set<int> parseRanges(string ranges){
             /* if t[i] is a number, add it to S */
             values.insert(values.end(), toNumber(tokens[i]));
 		} else {
-            /* given a string "a-b" adds all values a..b inclusive to S
-                parse is as "start-end", and add all values from start
-                to end to the set */
-            // todo: simpler math?
-            int start = toNumber(tokens[i].substr(0, tokens[i].find("-")));
-            int end = toNumber(tokens[i].substr(tokens[i].find("-") + 1, tokens[i].size() - tokens[i].find("-") - 1));
-            for (int j = start; j <= end; j++){
-                values.insert(values.end(), j);
+            if (tokens[i].find("-") == 0){
+                /* the hyphen was found at the beginning of the string
+                 * this means the string is a negative integer */
+                values.insert(values.end(), toNumber(tokens[i]));
+            } else {
+                /* given a string "a-b" adds all values a..b inclusive to S
+                    parse is as "start-end", and add all values from start
+                    to end to the set */
+                // todo: simpler math?
+                int start = toNumber(tokens[i].substr(0, tokens[i].find("-")));
+                int end = toNumber(tokens[i].substr(tokens[i].find("-") + 1, tokens[i].size() - tokens[i].find("-") - 1));
+                for (int j = start; j <= end; j++){
+                    values.insert(values.end(), j);
+                }
             }
-		}
-	}
+        }
+    }
 
     /*cout << "Range: " << endl;
     for (set<int>::iterator i = values.begin(); i != values.end(); i++){

@@ -79,6 +79,7 @@ int ResultPage::boolsToNumber(bool r0, bool r1, bool r2){
  * @return 0 if s1's button is checked,  1 if s2's button is checked,
  * 2 if s3's button is checked. Returns -1 if none are checked, but this
  * should never happen.
+ *
  **/
 int ResultPage::getButtonPressed(QString s1, QString s2, QString s3){
     if(field(s1).toBool()){
@@ -403,6 +404,13 @@ void ResultPage::initializePage(){
     ICRadios = getButtonPressed("ICOnesButton", "ICTwoButton", "ICCustomButton");
             //boolsToNumber(field("ICOnesButton").toBool(), field("ICTwoButton").toBool(), field("ICCustomButton").toBool());
 
+    /* Gets the index of the first IC  */
+    startIndex = field("startIndex").toInt();
+
+    /* Gets the index of the first IC  */
+    bool anchor = field(tr("ICAnchorButton")).toBool();
+    int anchorValue = field(tr("anchorValue")).toInt();
+
     QLabel *ICLabel = new QLabel(tr("ICs:"));
     ICLabel->setFont(QFont("Verdana", 10, QFont::Bold));
     optionListLayout->addWidget(ICLabel);
@@ -581,6 +589,10 @@ void ResultPage::initializePage(){
 
     vector<Set> IC_Vs;
 
+//    for (int i = 0; i != ICListSplit.size(); i++) {
+//        set<int> IC = parseRanges(ICListSplit.at(i));
+//        IC_Vs.push_back(IC);
+//    }
     while (InitialConditions.find(" ") != string::npos){
         InitialConditions.erase(InitialConditions.find(" "), 1);
     }
@@ -648,7 +660,7 @@ void ResultPage::initializePage(){
         if(IC_option == 0 || IC_option == 1){
             progress.setValue(i);
             currentIC.push_back(IC_option + 1); // if all 1s, push a 1, if 1..2, push a 2
-            Sequence testSequence = Sequence(recursion, para_list[i], currentIC, constraintList);
+            Sequence testSequence = Sequence(recursion, para_list[i], currentIC, constraintList, anchor, anchorValue);
             while(testSequence.dieImmediately()){
                 // changes the last 2 to a 1 if IC_opt == 1
                 currentIC[currentIC.size()-1] = 1; // does nothing if IC_options = 0
@@ -674,7 +686,7 @@ void ResultPage::initializePage(){
 
         if(!usingCustomIC){
             progress.setValue(i);
-            Sequence S = Sequence(recursion, para_list[i], currentIC, constraintList);
+            Sequence S = Sequence(recursion, para_list[i], currentIC, constraintList, anchor, anchorValue);
             if(analyzeSequence(&S, so, fo, GS_list)){
                 addToTable(S, para_list[i], currentIC, mainTable, row, so);
                 row++;
@@ -682,7 +694,7 @@ void ResultPage::initializePage(){
         }else{
             for(uint j = 0; j < IC_list.size(); j++){
                 progress.setValue(IC_list.size()*i + j);
-                Sequence S = Sequence(recursion, para_list[i], IC_list.at(j), constraintList, startIndex);
+                Sequence S = Sequence(recursion, para_list[i], IC_list.at(j), constraintList, anchor, anchorValue, startIndex);
                 if(analyzeSequence(&S, so, fo, GS_list)){
                     addToTable(S, para_list[i], IC_list.at(j), mainTable, row, so);
                     row++;
@@ -748,9 +760,6 @@ void ResultPage::cleanupPage(){
  * Imports data from the options page so it can be used by the main method
  */
 void ResultPage::importOptionsPage(){
-
-    /* Gets the index of the first IC  */
-    startIndex = field("startIndex").toInt();
 
     /* Sets the toggles for the summaries to the appropriate value,
       depending on the corresponding checkbox on the options page */

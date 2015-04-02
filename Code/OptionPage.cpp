@@ -9,9 +9,7 @@ void OptionPage::updateLabel()
 
     vector<int> dummy;
     vector<string> dummyString;
-    Sequence S(field("newRecursion").toString().toStdString(),dummy,dummy, dummyString);
-
-
+    Sequence S(field("newRecursion").toString().toStdString(), dummy, dummy, dummyString, false, 1);
 
     QString newLabel = field("newRecursion").toString();
 

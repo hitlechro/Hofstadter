@@ -661,11 +661,13 @@ void ResultPage::initializePage(){
             progress.setValue(i);
             currentIC.push_back(IC_option + 1); // if all 1s, push a 1, if 1..2, push a 2
             Sequence testSequence = Sequence(recursion, para_list[i], currentIC, constraintList, anchor, anchorValue);
-            while(testSequence.dieImmediately()){
+            unsigned int firstIndexAfterIC = 2;
+            while(testSequence.compute(firstIndexAfterIC)){
                 // changes the last 2 to a 1 if IC_opt == 1
-                currentIC[currentIC.size()-1] = 1; // does nothing if IC_options = 0
-                currentIC.push_back(IC_option + 1);
-                testSequence.R = currentIC;
+                if (IC_option == 1) {
+                    currentIC[currentIC.size()-1] = 1; // does nothing if IC_options = 0
+                } currentIC.push_back(IC_option + 1);
+                testSequence.R.push_back(IC_option + 1);
                 /* If too many terms are invalid, just say that
                     the sequence is invalid */
                 //todo: this could be smarter: user defined, based on rec, etc.
@@ -673,6 +675,8 @@ void ResultPage::initializePage(){
                     undefined = true;
                     break;
                 }
+
+                firstIndexAfterIC += 1;
             }
         } else {
             //todo: find a way to use all ICs

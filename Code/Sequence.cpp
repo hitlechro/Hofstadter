@@ -29,6 +29,10 @@ void Sequence::init(string sform, Vector& IC) {
     }
     c.saveParameters(form); // initialize and "save" the parameters
 
+    setDefault();
+}
+
+void Sequence::setDefault(void) {
     slow = true;
     slowEventually = true;
     slowProportion = 0;
@@ -52,13 +56,14 @@ bool Sequence::dieImmediately(void){
     return false;
 }
 
-
 /**
   Computes the first n iterations of the recursion and puts them into the
   return vector.
   @param n The number of iterations to calculate
+  returns false if no problems occured (no news is good news)
   */
-void Sequence::compute(const unsigned int n){
+bool Sequence::compute(const unsigned int n){
+    setDefault();
     int e;
     vector<string> tokenForm = c.tokenize(form);
 
@@ -79,6 +84,8 @@ void Sequence::compute(const unsigned int n){
             }
         }
     }
+
+    return die;
 }
 
 /**

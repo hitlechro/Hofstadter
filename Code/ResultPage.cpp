@@ -427,7 +427,7 @@ void ResultPage::initializePage(){
         CopyTableWidget *ICTable = new CopyTableWidget(ICListSplit.size(),2);
         ICTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
         for (int i = 0; i < ICListSplit.size(); i++){
-            QTableWidgetItem *ICItem = new QTableWidgetItem(tr("R(%1)").arg(i+1));
+            QTableWidgetItem *ICItem = new QTableWidgetItem(tr("R(%1)").arg(i+startIndex));
             ICItem->setFlags(Qt::ItemIsEditable);
             ICTable->setItem(i, 0, ICItem);
 

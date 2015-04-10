@@ -108,6 +108,9 @@ void popDebug(QString s){
   @param c The column in the table */
 void ResultPage::showSequence(int r, int c){
 
+    /* Gets the index of the first IC  */
+    startIndex = field("startIndex").toInt();
+
     /* If that column is one of the "simple" summary options */
     if (headers[c] == "Sequence" || headers[c] == "2R(n)-n"
             || headers[c] == "R(n)-R(n-1)" || headers[c] == "Frequency"
@@ -148,11 +151,51 @@ void ResultPage::showSequence(int r, int c){
         SequenceTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
         QStringList verticalHeader;
 
+        /* Here is where we insert the values of R(n) into the table,
+         * one-by-one, from left-to-right, from top-to-bottom.
+         *
+         * However, we need to start at startIndex's cell. */
+
+        // get the indices of the first row and last row
+        int first_row, last_row;
+        if (startIndex <= 0) {
+            first_row = (-1)*((std::abs (startIndex-1)) / 10) - 1;
+        } else {
+            first_row = (startIndex - 1) / 10;
+        }
+
+        if (startIndex + (int)V[r].size() < 0) {
+            last_row = (-1)*((std::abs (startIndex+(int)V[r].size()-1)) / 10) - 1;
+        } else {
+            last_row = (startIndex + (int)V[r].size() - 1) / 10;
+        }
+
         for (int i = 1; i < (int)V[r].size(); i++){
             QTableWidgetItem *sequenceValue = new QTableWidgetItem(tr("%1").arg(V[r][i]));
-            SequenceTable->setItem((i-1) / 10, (i-1) % 10, sequenceValue);
-            verticalHeader << tr("%1 + n").arg((i-1)*10);
+
+            // get the row index
+            int row_coord = (startIndex-1) + (i-1);
+            int row;
+            if (row_coord < 0) {
+                row = (-1)*((std::abs (row_coord)) / 10) - 1;
+            } else {
+                row = row_coord / 10;
+            }
+
+            // get the column index
+            int col_coord = (startIndex-1) + (i-1);
+            while (col_coord < 0) {
+                col_coord += 10;
+            } int col = (col_coord) % 10;
+
+            SequenceTable->setItem(row-first_row, col, sequenceValue);
         }
+
+        // label the vertical headers
+        for (int i = first_row; i != last_row; i++) {
+            verticalHeader << tr("%1 + n").arg((i)*10);
+        }
+
         SequenceTable->setVerticalHeaderLabels(verticalHeader);
         SequenceTable->resizeColumnsToContents();
         SequenceTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);

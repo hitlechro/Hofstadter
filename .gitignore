@@ -36,5 +36,4 @@ build-Hofstadter-*
 *.qmlproject.user.*
 
 *.exe
-*.docx
 Documentation/Hofstadter - Manual.pdf

@@ -108,32 +108,54 @@ void popDebug(QString s){
   @param c The column in the table */
 void ResultPage::showSequence(int r, int c){
 
-    /* Gets the index of the first IC  */
-    startIndex = field("startIndex").toInt();
-
     /* If that column is one of the "simple" summary options */
     if (headers[c] == "Sequence" || headers[c] == "2R(n)-n"
-            || headers[c] == "R(n)-R(n-1)" || headers[c] == "Frequency"
+            || headers[c] == "R(n)-R(n-1)" || headers[c] == "R(n)/n" || headers[c] == "Frequency"
             || headers[c] == summaryExpression){
 
         /* V is the vector that the output will be stored in. The vectors that
         contain the data are created when the page is initialized */
-        vector<vector<int> > V;
+        vector<vector<int> > Vtemp;
 
         /* If the header is sequence, set V to the result vector
-          If the heder is 2R(n)-n, set V to that vector
+          If the header is 2R(n)-n, set V to that vector
           etc */
         /* if <headerName> = <name>, V = <relevant vector> */
+
         if (headers[c] == "Sequence"){
-            V = sequenceVector;
+            Vtemp = sequenceVector;
         } else if (headers[c] == "2R(n)-n"){
-            V = twoRnMinusnVector;
+            Vtemp = twoRnMinusnVector;
         } else if (headers[c] == "R(n)-R(n-1)"){
-            V = rnMinusRnVector;
+            Vtemp = rnMinusRnVector;
         } else if (headers[c] == "Frequency"){
-            V = frequencyVector;
+            Vtemp = frequencyVector;
         } else if (headers[c] == summaryExpression){
-            V = additionVector;
+            Vtemp = additionVector;
+        } else {
+            Vtemp = sequenceVector; // we're doing this temporarily
+        }
+
+        vector<vector<double> > V(Vtemp.size(), vector<double>(Vtemp.at(r).size(),0));
+
+        // poor typecasting... fix this
+        if (headers[c] != "R(n)/n") {
+            for (int i = 0; i != V.at(r).size(); i++) {
+                V.at(r).at(i) = (double) Vtemp.at(r).at(i);
+            }
+        } else {
+            V = RnDivnVector;
+        }
+
+        /** if V is the vector, then V[1] either points to the first
+         *  initial condition, or it points to the lowest value
+         *  in R. We decide that here, for it will help us align the
+         *  cells properly. */
+        int minIndex;
+        if (headers[c] == "Frequency"){
+            minIndex = V[r][0]; // we store the minimum value here
+        } else {
+            minIndex = field("startIndex").toInt();
         }
 
         QDialog *sequenceDialog = new QDialog(this);
@@ -158,23 +180,23 @@ void ResultPage::showSequence(int r, int c){
 
         // get the indices of the first row and last row
         int first_row, last_row;
-        if (startIndex <= 0) {
-            first_row = (-1)*((std::abs (startIndex-1)) / 10) - 1;
+        if (minIndex <= 0) {
+            first_row = (-1)*((std::abs (minIndex-1)) / 10) - 1;
         } else {
-            first_row = (startIndex - 1) / 10;
+            first_row = (minIndex - 1) / 10;
         }
 
-        if (startIndex + (int)V[r].size() < 0) {
-            last_row = (-1)*((std::abs (startIndex+(int)V[r].size()-1)) / 10) - 1;
+        if (minIndex + (int)V[r].size() < 0) {
+            last_row = (-1)*((std::abs (minIndex+(int)V[r].size()-1)) / 10) - 1;
         } else {
-            last_row = (startIndex + (int)V[r].size() - 1) / 10;
+            last_row = (minIndex + (int)V[r].size() - 1) / 10;
         }
 
         for (int i = 1; i < (int)V[r].size(); i++){
             QTableWidgetItem *sequenceValue = new QTableWidgetItem(tr("%1").arg(V[r][i]));
 
             // get the row index
-            int row_coord = (startIndex-1) + (i-1);
+            int row_coord = (minIndex-1) + (i-1);
             int row;
             if (row_coord < 0) {
                 row = (-1)*((std::abs (row_coord)) / 10) - 1;
@@ -183,7 +205,7 @@ void ResultPage::showSequence(int r, int c){
             }
 
             // get the column index
-            int col_coord = (startIndex-1) + (i-1);
+            int col_coord = (minIndex-1) + (i-1);
             while (col_coord < 0) {
                 col_coord += 10;
             } int col = (col_coord) % 10;
@@ -309,45 +331,6 @@ void ResultPage::showSequence(int r, int c){
         generationDialog->resize(400, 400);
 
         generationDialog->show();
-    } else if (headers[c] == "R(n)/n"){
-        vector<vector<double> > V;
-
-        V = RnDivnVector;
-
-        QDialog *sequenceDialog = new QDialog(this);
-        QLabel *title = new QLabel(headers[c] + tr((multiplePara)?" - Parameters : ":" - IC : ")+ICParaList[r]);
-        title->setFont(QFont("Verdana", 10, QFont::Bold));
-
-        QListWidget *rangeList = new QListWidget;
-        for (int i = 0; i < (int)(V[r].size() / 10000); i++){
-            new QListWidgetItem(tr("%1 - %2").arg(i * 10000 + 1).arg((i+1) * 10000), rangeList);
-        }
-
-        //rangeList->setSectionResizeMode(QListView::Adjust);
-        CopyTableWidget *SequenceTable = new CopyTableWidget(ceil((double)(V[r].size()-1) / 10), 10);
-        QStringList verticalHeader;
-
-        for (int i = 1; i < (int)V[r].size(); i++){
-            QTableWidgetItem *sequenceValue = new QTableWidgetItem(tr("%1").arg(V[r][i]));
-            SequenceTable->setItem((i-1) / 10, (i-1) % 10, sequenceValue);
-            verticalHeader << tr("%1 + n").arg((i-1)*10);
-        }
-        SequenceTable->setVerticalHeaderLabels(verticalHeader);
-        SequenceTable->resizeColumnsToContents();
-        SequenceTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-        QSizePolicy sizeP;
-        SequenceTable->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        //rangeList->setMaximumWidth(100);
-
-
-        QVBoxLayout *dialogLayout = new QVBoxLayout;
-        //dialogLayout->addWidget(rangeList);
-        dialogLayout->addWidget(title);
-        dialogLayout->addWidget(SequenceTable);
-        sequenceDialog->setLayout(dialogLayout);
-        sequenceDialog->resize(600, 400);
-
-        sequenceDialog->show();
     }
 }
 

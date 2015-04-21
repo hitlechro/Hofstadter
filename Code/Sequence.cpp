@@ -415,14 +415,23 @@ void Sequence::computetwoRnMinusn(){
   @example (1, 1, 2, 3, 3, 5) --> {2, 1, 2, 0, 1}
   */
 void Sequence::computefrequency(){
-        /* Makes frequency as long as the largest element in R */
-        /* eg: (1, 1, 2, 3, 3, 5) --> {0, 0, 0, 0, 0} */
-        for (int i = 1; i < R.size(); i++)
-            while (frequency.size() <= R[i])
-                frequency.push_back(0);
-        /* Increases the value of frequency[x] by 1 for each
-           occurence of x in R */
-        /* eg: (1, 1, 2, 3, 3, 5) & {0, 0, 0, 0, 0} --> {2, 1, 2, 0, 1} */
-        for (int i = 1; i < R.size(); i++)
-            frequency[R[i]]++;
+    // we want to start after the first index because there's a -1 there
+    int min = *std::min_element(R.begin()+1, R.end());
+    int max = *std::max_element(R.begin()+1, R.end());
+    int len = (max - min) + 1; // max-min inclusive
+
+    for (int i = 0; i < len+1; i++) frequency.push_back(0);
+    // the plus one accounts for the fact that we need an extra
+    // placeholder for the zero'th element which is ignored
+
+    frequency.at(0) = min;
+    // this will be useful when showing the sequence
+
+    /* Increases the value of frequency[x] by 1 for each
+       occurence of x in R */
+    /* eg: (1, 1, 2, 3, 3, 5) & {0, 0, 0, 0, 0, 0} --> {0, 2, 1, 2, 0, 1} */
+    for (int i = 1; i < R.size(); i++) {
+        int ind = (R[i] - min) + 1; // this returns the proper index for R[i]
+        frequency[ind]++;
+    }
 }

@@ -1184,13 +1184,19 @@ void ResultPage::addToTable(Sequence S, vector<int> para_list, vector<int> curre
     mainTable->setRowCount(row + 1);
     int col = 0;
 
-    /* Adds the column with the parameter info */
-    for(uint i = 0; i < para_list.size(); i++){
-        paraValueString += tr("%1").arg(para_list.at(i));
-        if(i != para_list.size() - 1){
-            paraValueString += tr(",");
+    // if there are no parameters, we should just set the string accordingly
+    if ((para_list.size() == 1) && (para_list.at(0) == INT_MIN)) {
+        paraValueString = tr("No parameters.");
+    } else {
+        /* Adds the column with the parameter info */
+        for(uint i = 0; i < para_list.size(); i++){
+            paraValueString += tr("%1").arg(para_list.at(i));
+            if(i != para_list.size() - 1){
+                paraValueString += tr(",");
+            }
         }
     }
+
     QTableWidgetItem *paraValueCell = new QTableWidgetItem(paraValueString);
     ICParaList << paraValueString;
     mainTable->setItem(row, col++, paraValueCell);

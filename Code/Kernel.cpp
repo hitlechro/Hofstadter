@@ -140,7 +140,12 @@ static set<int> parseRanges(string ranges){
     for (uint i = 0; i < tokens.size(); i++){
         if (tokens[i].find("-") == string::npos){
             /* if t[i] is a number, add it to S */
-            values.insert(values.end(), toNumber(tokens[i]));
+            if (tokens[i] == "") {
+                // no params were given
+                values.insert(values.end(), INT_MIN);
+            } else {
+                values.insert(values.end(), toNumber(tokens[i]));
+            }
 		} else {
             if (tokens[i].find("-") == 0){
                 /* the hyphen was found at the beginning of the string

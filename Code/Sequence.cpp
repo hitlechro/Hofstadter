@@ -62,7 +62,7 @@ bool Sequence::dieImmediately(void){
   @param n The number of iterations to calculate
   returns false if no problems occured (no news is good news)
   */
-bool Sequence::compute(const unsigned int n){
+bool Sequence::compute(const int n){
     setDefault();
     int e;
     vector<string> tokenForm = c.tokenize(form);

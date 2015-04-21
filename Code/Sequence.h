@@ -50,7 +50,7 @@ class Sequence {
         Sequence(string sform, Vector& paraValue, Vector& IC, vector<string>& sconstraint_list, bool sAnchor, int sAnchorValue);
         void init(string sform, Vector& IC);
         void setDefault(void); /* Can be moved to private. */
-        bool compute(const unsigned int n); // generate the sequence up to n
+        bool compute(const int n); // generate the sequence up to n
         void print(void);
         bool satisfiedConstraint(void);
         bool dieImmediately(void);

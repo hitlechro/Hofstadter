@@ -704,7 +704,7 @@ void ResultPage::initializePage(){
             progress.setValue(i);
             currentIC.push_back(IC_option + 1); // if all 1s, push a 1, if 1..2, push a 2
             Sequence testSequence = Sequence(recursion, para_list[i], currentIC, constraintList, anchor, anchorValue);
-            unsigned int firstIndexAfterIC = 2;
+            int firstIndexAfterIC = 2;
             while(testSequence.compute(firstIndexAfterIC)){
                 // changes the last 2 to a 1 if IC_opt == 1
                 if (IC_option == 1) {

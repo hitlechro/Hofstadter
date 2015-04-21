@@ -264,7 +264,7 @@ OptionPage::OptionPage(QWidget *parent): QWizardPage(parent)
      QGroupBox *outputGroupBox = new QGroupBox(tr("Output"));
      QComboBox *outputComboBox = new QComboBox();
      outputComboBox->addItems(QStringList() << "On Screen Display" << "Microsoft Excel File" << "Text File");
-     QLabel *outputLabel_0 = new QLabel(tr("Generate until:"));
+     QLabel *outputLabel_0 = new QLabel(tr("Generate until term:"));
      QLabel *outputLabel_1 = new QLabel(tr("Output to:"));
      QSpinBox *termination = new QSpinBox;
      termination->setMinimum(0);

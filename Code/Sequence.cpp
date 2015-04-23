@@ -395,8 +395,13 @@ void Sequence::computeRnDivn(){
     /* used to increase the size, since i > 0 */ //--> todo: why?
     RnDivn.push_back(-1);
     /* for each element in R, store R(n)/n in RnDivn */
-    for (int i = 1; i < R.size(); i++)
-        RnDivn.push_back((double)R[i] / i);
+    for (int i = 1; i < R.size(); i++) {
+        if (getMapped(i)!=0) { // we need to ensure that we're not dividing by zero
+            RnDivn.push_back((double)R[i] / getMapped(i));
+        } else {
+            RnDivn.push_back(INT_MAX);
+        }
+    }
 }
 
 /**
@@ -406,8 +411,9 @@ void Sequence::computetwoRnMinusn(){
     /* used to increase the size, since i > 0 */ //--> todo: why?
     twoRnMinusn.push_back(-1);
     /* for each element in R, store 2*R(n)-n in twoRnMinusn */
-    for (int i = 1; i < R.size(); i++)
-        twoRnMinusn.push_back(2 * R[i] - i);
+    for (int i = 1; i < R.size(); i++) {
+        twoRnMinusn.push_back(2 * R[i] - getMapped(i));
+    }
 }
 
 /**
@@ -434,4 +440,14 @@ void Sequence::computefrequency(){
         int ind = (R[i] - min) + 1; // this returns the proper index for R[i]
         frequency[ind]++;
     }
+}
+
+/**
+  Returns the index in the recursion to which "i" is mapped.
+  @example If the first base case is R(-3), then R[1] will reference the -3'rd term.
+  @example Moreover, R[5] will reference the 5th term in the sequence, that is, R(1).
+  */
+int Sequence::getMapped(int i) {
+    int map = startIndex + (i-1);
+    return map;
 }

@@ -617,7 +617,6 @@ void ConfigPage::updateICFinish(int finishIndex)
  */
 void ConfigPage::updateICStart(int startIndex)
 {
-    //int startIndex = ICSpinBox->value();
     ICGlobalLineEdit->setText(tr(""));
 
     int currMinInd = ICTable->item(0,0)->text().split("(")[1].split(")")[0].toInt();

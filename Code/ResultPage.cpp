@@ -168,11 +168,6 @@ void ResultPage::showSequence(int r, int c){
             new QListWidgetItem(tr("%1 - %2").arg(i * 10000 + 1).arg((i+1) * 10000), rangeList);
         }
 
-        //rangeList->setSectionResizeMode(QListView::Adjust);
-        CopyTableWidget *SequenceTable = new CopyTableWidget(ceil((double)(V[r].size()-1) / 10), 10);
-        SequenceTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-        QStringList verticalHeader;
-
         /* Here is where we insert the values of R(n) into the table,
          * one-by-one, from left-to-right, from top-to-bottom.
          *
@@ -186,11 +181,16 @@ void ResultPage::showSequence(int r, int c){
             first_row = (minIndex - 1) / 10;
         }
 
-        if (minIndex + (int)V[r].size() < 0) {
-            last_row = (-1)*((std::abs (minIndex+(int)V[r].size()-1)) / 10) - 1;
-        } else {
-            last_row = (minIndex + (int)V[r].size() - 1) / 10;
-        }
+        // equation is number_computed + accounting_for_varying_minIndex
+        int last_index_computed = (V[r].size()-1) + (minIndex-1);
+        last_row = (last_index_computed-1)/ 10;
+
+        int rows = last_row - first_row + 1; // we need to show an extra row
+        int cols = 10;                       // we'll show 10 columns
+
+        CopyTableWidget *SequenceTable = new CopyTableWidget(rows, cols);
+        SequenceTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        QStringList verticalHeader;
 
         for (int i = 1; i < (int)V[r].size(); i++){
             QTableWidgetItem *sequenceValue = new QTableWidgetItem(tr("%1").arg(V[r][i]));
@@ -214,7 +214,7 @@ void ResultPage::showSequence(int r, int c){
         }
 
         // label the vertical headers
-        for (int i = first_row; i != last_row; i++) {
+        for (int i = first_row; i != last_row+1; i++) {
             verticalHeader << tr("%1 + n").arg((i)*10);
         }
 

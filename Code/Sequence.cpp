@@ -401,9 +401,7 @@ void Sequence::computeRnDivn(){
     /* used to increase the size, since i > 0 */ //--> todo: why?
     RnDivn.push_back(-1);
     /* for each element in R, store R(n)/n in RnDivn */
-    for (int i = 1; i < R.size(); i++) {
-        if (getMapped(i)!=0) { // we need to ensure that we're not dividing by zero
-            RnDivn.push_back((double)R[i] / getMapped(i));
+        if (i!=0) { // we need to ensure that we're not dividing by zero
         } else {
             RnDivn.push_back(INT_MAX);
         }
@@ -417,8 +415,6 @@ void Sequence::computetwoRnMinusn(){
     /* used to increase the size, since i > 0 */ //--> todo: why?
     twoRnMinusn.push_back(-1);
     /* for each element in R, store 2*R(n)-n in twoRnMinusn */
-    for (int i = 1; i < R.size(); i++) {
-        twoRnMinusn.push_back(2 * R[i] - getMapped(i));
     }
 }
 
@@ -442,8 +438,6 @@ void Sequence::computefrequency(){
     /* Increases the value of frequency[x] by 1 for each
        occurence of x in R */
     /* eg: (1, 1, 2, 3, 3, 5) & {0, 0, 0, 0, 0, 0} --> {0, 2, 1, 2, 0, 1} */
-    for (int i = 1; i < R.size(); i++) {
-        int ind = (R[i] - min) + 1; // this returns the proper index for R[i]
         frequency[ind]++;
     }
 }
@@ -453,7 +447,7 @@ void Sequence::computefrequency(){
   @example If the first base case is R(-3), then R[1] will reference the -3'rd term.
   @example Moreover, R[5] will reference the 5th term in the sequence, that is, R(1).
   */
-int Sequence::getMapped(int i) {
-    int map = startIndex + (i-1);
+int Sequence::getIndexInR(int i) {
+    int map = i + (1-startIndex);
     return map;
 }

@@ -68,7 +68,7 @@ class Sequence {
         void computeRnDivn();
         void computetwoRnMinusn();
         void computefrequency();
-        int getMapped(int i);
+        int getIndexInR(int i);
 };
 
 #endif // SEQUENCE_H

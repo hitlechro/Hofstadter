@@ -386,11 +386,15 @@ bool Sequence::checkContainSubsequence(Vector subsequence){
 //todo: document me
 //todo: error handling
 void Sequence::computeAddition(string pression){
-    if (pression.find("n") == -1){
-        addition.push_back( c.evaluate(0, R, c.tokenize(pression), anchor, anchorValue, startIndex) );
-    } else {
-        for (int i = 0; i < R.size(); i++)
-            addition.push_back( c.evaluate(i, R, c.tokenize(pression), anchor, anchorValue, startIndex) );
+    addition.push_back(-1);
+    for (int i = startIndex, j = 1; j < R.size(); i++, j++) {
+        int val;
+        try {
+            val = c.evaluate(i, R, c.tokenize(pression), anchor, anchorValue, startIndex);
+        } catch (int E) {
+            val = INT_MAX;
+        }
+        addition.push_back(val);
     }
 }
 

@@ -172,9 +172,7 @@ int Calculator::evaluate(int n, vector<int>& R, vector<string> s, bool anchor, i
         } else {
             throw EUINDEX;
         }
-    }else if(index < R.size()) {
-        return R.at(index);
-    }	 // todo: is this reliable?
+    }
 
     // used later in the function.
     //bool isParameter = s.size() == 1

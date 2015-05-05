@@ -108,10 +108,14 @@ void popDebug(QString s){
   @param c The column in the table */
 void ResultPage::showSequence(int r, int c){
 
+    // check if headers[c] starts with Additional
+    std::string prefix = "Additional: ";
+    std::string argument = headers[c].toStdString();
+
     /* If that column is one of the "simple" summary options */
     if (headers[c] == "Sequence" || headers[c] == "2R(n)-n"
             || headers[c] == "R(n)-R(n-1)" || headers[c] == "R(n)/n" || headers[c] == "Frequency"
-            || headers[c] == summaryExpression){
+            || argument.substr(0, prefix.size()) == prefix){
 
         /* V is the vector that the output will be stored in. The vectors that
         contain the data are created when the page is initialized */
@@ -130,7 +134,7 @@ void ResultPage::showSequence(int r, int c){
             Vtemp = rnMinusRnVector;
         } else if (headers[c] == "Frequency"){
             Vtemp = frequencyVector;
-        } else if (headers[c] == summaryExpression){
+        } else if (argument.substr(0, prefix.size()) == prefix){
             Vtemp = additionVector;
         } else {
             Vtemp = sequenceVector; // we're doing this temporarily
@@ -193,7 +197,12 @@ void ResultPage::showSequence(int r, int c){
         QStringList verticalHeader;
 
         for (int i = 1; i < (int)V[r].size(); i++){
-            QTableWidgetItem *sequenceValue = new QTableWidgetItem(tr("%1").arg(V[r][i]));
+            QTableWidgetItem *sequenceValue;
+            if (V[r][i]==INT_MAX) {
+                sequenceValue = new QTableWidgetItem(tr("Error"));
+            } else {
+                sequenceValue = new QTableWidgetItem(tr("%1").arg(V[r][i]));
+            }
 
             // get the row index
             int row_coord = (minIndex-1) + (i-1);
@@ -846,7 +855,7 @@ void ResultPage::createHeaders(SummaryOptions so){
     if (so.twoRnMinusn){ headers << "2R(n)-n";}
     if (so.rnMinusRn){ headers << "R(n)-R(n-1)";}
     if (so.frequency){ headers << "Frequency";}
-    if (so.additional){ headers << /*tqstring*/(* new QString).fromStdString(so.expression);}
+    if (so.additional){ headers << "Additional: " + /*tqstring*/(* new QString).fromStdString(so.expression);}
 
     headers << "Message";
 }

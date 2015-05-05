@@ -43,6 +43,7 @@ void Sequence::setDefault(void) {
     containSubstring = false;
     containSubsequence = false;
     frequencyMatch = false;
+    message = "Sequence computed successfully.";
 }
 
 /**
@@ -75,13 +76,18 @@ bool Sequence::compute(const int n){
             e = c.evaluate(i, R, tokenForm, anchor, anchorValue, startIndex);
             R.push_back(e);
         }catch(int E){
-            if ((E == EINDEX) || (E == EFLOW)) {
-                die = true;
-                deathTime = i;
-                break; // INCLUDE A MESSAGE OR SOME INDICATION
+            die = true;
+            deathTime = i;
+            if (E == EUINDEX) {// we need to explain what type of index problem occured
+                message = QObject::tr("R(%1) tried to call R(n) for n < %2.").arg(deathTime).arg(startIndex);
+            } else if (E == EOINDEX) {// we need to explain what type of index problem occured
+                message = QObject::tr("R(%1) tried to call R(n) for n >= %1.").arg(deathTime);
             } else if (E == ESYNTAX){
-                // handle syntax error
+                message = QObject::tr("This recursion has a bad syntax, making it uncomputable.").arg(deathTime);
+            } else if (E == EFLOW) { // we only check overflows for now
+                message = QObject::tr("Overflow Error occured when computing R(%1).").arg(deathTime);
             }
+            break; // INCLUDE A MESSAGE OR SOME INDICATION
         }
     }
 

@@ -847,6 +847,8 @@ void ResultPage::createHeaders(SummaryOptions so){
     if (so.rnMinusRn){ headers << "R(n)-R(n-1)";}
     if (so.frequency){ headers << "Frequency";}
     if (so.additional){ headers << /*tqstring*/(* new QString).fromStdString(so.expression);}
+
+    headers << "Message";
 }
 
 /**
@@ -1131,6 +1133,10 @@ void ResultPage::configOutputTable(SummaryOptions so, Sequence S, int row, int s
         mainTable->setItem(row, column++, additionalCell);
         additionVector.push_back(static_cast<vector<int> >(S.addition));
     }
+
+    // a message will always be supplied
+    QTableWidgetItem *messageCell = new QTableWidgetItem(S.message);
+    mainTable->setItem(row, column++, messageCell);
 
     //*newColumnValue = column;
 }

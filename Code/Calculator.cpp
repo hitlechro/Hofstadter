@@ -170,7 +170,7 @@ int Calculator::evaluate(int n, vector<int>& R, vector<string> s, bool anchor, i
         if (anchor) {
             return anchorValue;
         } else {
-            throw EINDEX;
+            throw EUINDEX;
         }
     }else if(index < R.size()) {
         return R.at(index);
@@ -232,7 +232,10 @@ int Calculator::evaluate(int n, vector<int>& R, vector<string> s, bool anchor, i
                 throw EFLOW;
             }
         }else if(s[i] == "/"){
-            //todo: check for 0!
+             // check if the divisor is zero
+            if (toNumber(s[i+1]) == 0) {
+                throw ENUMBER;
+            }
             s[i-1] = toString(toNumber(s[i-1]) / toNumber(s[i+1]));
             s.erase(s.begin()+i, s.begin()+i+2);		/* erasing i..i+2 removes the operator and 2nd operand */
             i-=2;
@@ -290,8 +293,10 @@ int Calculator::stringEvaluate(int n, vector<int> &R, string s, bool anchor, int
         int index = evaluate(n, R, tokenize(sub), anchor, anchorValue, n_0) + (1-n_0); // the 2nd term returns the correct index
         if (index < 1 && anchor) {
             return anchorValue;
-        } else if (index < 1 || index >= R.size()){
-            throw EINDEX;  // why not throw it?
+        } else if (index < 1){
+            throw EUINDEX;
+        } else if (index >= R.size()){
+            throw EOINDEX;
         } else {
             return R.at(index); //getR(toString(index));
         }

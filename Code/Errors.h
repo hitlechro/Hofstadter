@@ -2,9 +2,10 @@
 #define ERRORS_H
 
 
-#define EINDEX -1   /* Index is out of bounds (too large, or nonpositive) */
-#define ESYNTAX -2  /* Syntax error in equation */
-#define ENUMBER -3  /* Number exception (divide by 0, etc) */
-#define ESTRING -4  /* Invalid string was used (null, " ", etc) */
-#define EFLOW -5    /* Overflow or Underflow Detected */
+#define EUINDEX -1  /* Index is out of bounds - less than startIndex */
+#define EOINDEX -2  /* Index is out of bounds - too large */
+#define ESYNTAX -3  /* Syntax error in equation */
+#define ENUMBER -4  /* Number exception (divide by 0, etc) */
+#define ESTRING -5  /* Invalid string was used (null, " ", etc) */
+#define EFLOW -6    /* Overflow or Underflow Detected */
 #endif // ERRORS_H

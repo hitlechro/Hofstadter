@@ -5,6 +5,8 @@
 #include "FilterOptions.h"
 #include "SummaryOptions.h"
 
+#include <QObject>
+
 using namespace std;
 typedef vector<int> Vector;
 
@@ -44,6 +46,8 @@ class Sequence {
         int largestGeneration;
         /** The proportion of iterations that are slow: R(n) - R(n-1) <= 1*/
         double slowProportion;
+        /* We want to give a message about the result of the Sequence computation */
+        QString message;
 
         /* Documented in Sequence.cpp */
         Sequence(string sform, Vector& paraValue, Vector& IC, vector<string>& sconstraint_list, bool sAnchor, int sAnchorValue, signed int sStartIndex);

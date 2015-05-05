@@ -401,7 +401,9 @@ void Sequence::computeRnDivn(){
     /* used to increase the size, since i > 0 */ //--> todo: why?
     RnDivn.push_back(-1);
     /* for each element in R, store R(n)/n in RnDivn */
+    for (int i = startIndex, j = 1; j < R.size(); i++, j++) {
         if (i!=0) { // we need to ensure that we're not dividing by zero
+            RnDivn.push_back((double)R[j] / i);
         } else {
             RnDivn.push_back(INT_MAX);
         }
@@ -415,6 +417,8 @@ void Sequence::computetwoRnMinusn(){
     /* used to increase the size, since i > 0 */ //--> todo: why?
     twoRnMinusn.push_back(-1);
     /* for each element in R, store 2*R(n)-n in twoRnMinusn */
+    for (int i = startIndex, j = 1; j < R.size(); i++, j++) {
+        twoRnMinusn.push_back(2 * R[j] - i);
     }
 }
 
@@ -438,6 +442,8 @@ void Sequence::computefrequency(){
     /* Increases the value of frequency[x] by 1 for each
        occurence of x in R */
     /* eg: (1, 1, 2, 3, 3, 5) & {0, 0, 0, 0, 0, 0} --> {0, 2, 1, 2, 0, 1} */
+    for (int i = startIndex, j = 1; j < R.size(); i++, j++) {
+        int ind = (R[j] - min) + 1; // this returns the proper index for R[i]
         frequency[ind]++;
     }
 }

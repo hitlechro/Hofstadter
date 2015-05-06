@@ -771,6 +771,51 @@ void ResultPage::initializePage(){
     mainLayout->dumpObjectTree();
 
     setLayout(mainLayout);
+
+    if (output == 1) { // We chose to export to a CSV Excel Document
+        /** Appends the current recursion (in the entry field) to the file */
+        /* try to open the file containing the recursions.
+        if it fails, just skip it */
+        QFile file("OutputData.csv");
+
+        if (file.exists()) { // we always want to write to a new file
+            file.remove();
+        }
+
+        if (!file.open(QIODevice::Append | QIODevice::Text))
+            return;
+        //todo: error message on failure
+
+        /* Create the stream */
+        QTextStream out(&file);
+
+        QString line;
+        line += "n"; line += ",";
+        if (so.sequence)   { line+="Sequence";    line+=",";}
+        if (so.RnDivn)     { line+="R(n)/n";      line+=",";}
+        if (so.twoRnMinusn){ line+="2R(n)-n"; line+=",";}
+        if (so.rnMinusRn)  { line+="R(n)-R(n-1)";   line+=",";}
+        if (so.frequency)  { line+="Frequency";   line+=",";}
+        if (so.additional) { line+="Additional: " + /*tqstring*/(* new QString).fromStdString(so.expression);    line+=",";}
+        out << line << "\n";
+        line.clear();
+
+        // here we're outputting the data into rows of our CSV file
+        for (int i=startIndex,j=1; j!=sequenceVector.at(0).size() ; i++, j++, line.clear()) {
+            line += tr("%1").arg(i); line += tr(",");
+            if (so.sequence)    { line+=tr("%1").arg(sequenceVector.at(0).at(j));    line+=tr(","); }
+            if (so.RnDivn)      { line+=tr("%1").arg(RnDivnVector.at(0).at(j));      line+=tr(","); }
+            if (so.twoRnMinusn) { line+=tr("%1").arg(twoRnMinusnVector.at(0).at(j)); line+=tr(","); }
+            if (so.rnMinusRn)   { line+=tr("%1").arg(rnMinusRnVector.at(0).at(j));   line+=tr(","); }
+            if (so.frequency && frequencyVector.at(0).size() > j)   { line+=tr("%1").arg(frequencyVector.at(0).at(j));   line+=tr(","); }
+            if (so.additional)  { line+=tr("%1").arg(additionVector.at(0).at(j));    line+=tr(","); }
+            line = line.left(line.length()-1); // remove the last comma
+            out << line << "\n";
+
+        }
+
+        file.close();
+    }
 }
 
 //todo: what should be cleaned up?

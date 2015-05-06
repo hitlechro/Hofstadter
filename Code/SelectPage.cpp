@@ -14,6 +14,7 @@ void SelectPage::saveRecursion(){
     QTextStream out(&file);
     out << newRecursion->text() << "\n";
     new QListWidgetItem(newRecursion->text(), recursionList);
+    file.close();
 }
 
 /** Removes the current recursion (in the list) from the list and file */
@@ -33,6 +34,7 @@ void SelectPage::removeRecursion(){
         out << recursionList->item(i)->text() << "\n";
     }
 
+    file.close();
 }
 
 /** Sets the text field's text to the selected item's text */

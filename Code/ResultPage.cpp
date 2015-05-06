@@ -790,31 +790,44 @@ void ResultPage::initializePage(){
         QTextStream out(&file);
 
         QString line;
-        line += "n"; line += ",";
-        if (so.sequence)   { line+="Sequence";    line+=",";}
-        if (so.RnDivn)     { line+="R(n)/n";      line+=",";}
-        if (so.twoRnMinusn){ line+="2R(n)-n"; line+=",";}
-        if (so.rnMinusRn)  { line+="R(n)-R(n-1)";   line+=",";}
-        if (so.frequency)  { line+="Frequency";   line+=",";}
-        if (so.additional) { line+="Additional: " + /*tqstring*/(* new QString).fromStdString(so.expression);    line+=",";}
+
+        for (int r=0; r!=sequenceVector.size(); r++) { // r holds the number of rows
+            line += "n"; line += ",";
+            if (so.sequence)   { line+=tr("Sequence");    line+=tr(",");}
+            if (so.RnDivn)     { line+=tr("R(n)/n");      line+=tr(",");}
+            if (so.twoRnMinusn){ line+=tr("2R(n)-n");     line+=tr(",");}
+            if (so.rnMinusRn)  { line+=tr("R(n)-R(n-1)"); line+=tr(",");}
+            if (so.frequency)  { line+=tr("Frequency");   line+=tr(",");}
+            if (so.additional) { line+="Additional: " + /*tqstring*/(* new QString).fromStdString(so.expression); line+=tr(",");}
+
+            if (r+1 == sequenceVector.size()) {
+                line = line.left(line.length()-1); // remove the last comma
+            } else {
+                line+=tr(","); // we need to add one more comma to add extra space for the new table of values
+            }
+        }
         out << line << "\n";
         line.clear();
 
         // here we're outputting the data into rows of our CSV file
         for (int i=startIndex,j=1; j!=sequenceVector.at(0).size() ; i++, j++, line.clear()) {
-            line += tr("%1").arg(i); line += tr(",");
-            if (so.sequence)    { line+=tr("%1").arg(sequenceVector.at(0).at(j));    line+=tr(","); }
-            if (so.RnDivn)      { line+=tr("%1").arg(RnDivnVector.at(0).at(j));      line+=tr(","); }
-            if (so.twoRnMinusn) { line+=tr("%1").arg(twoRnMinusnVector.at(0).at(j)); line+=tr(","); }
-            if (so.rnMinusRn)   { line+=tr("%1").arg(rnMinusRnVector.at(0).at(j));   line+=tr(","); }
-            if (so.frequency && frequencyVector.at(0).size() > j)   { line+=tr("%1").arg(frequencyVector.at(0).at(j));   line+=tr(","); }
-            if (so.additional)  { line+=tr("%1").arg(additionVector.at(0).at(j));    line+=tr(","); }
-            line = line.left(line.length()-1); // remove the last comma
-            out << line << "\n";
+            for (int r=0; r!=sequenceVector.size(); r++) { // r holds the number of rows
+                line += tr("%1").arg(i); line += tr(",");
+                if (so.sequence)    { line+=tr("%1").arg(sequenceVector.at(r).at(j));    line+=tr(","); }
+                if (so.RnDivn)      { line+=tr("%1").arg(RnDivnVector.at(r).at(j));      line+=tr(","); }
+                if (so.twoRnMinusn) { line+=tr("%1").arg(twoRnMinusnVector.at(r).at(j)); line+=tr(","); }
+                if (so.rnMinusRn)   { line+=tr("%1").arg(rnMinusRnVector.at(r).at(j));   line+=tr(","); }
+                if (so.frequency && frequencyVector.at(r).size() > j)
+                                    { line+=tr("%1").arg(frequencyVector.at(r).at(j));   line+=tr(","); }
+                if (so.additional)  { line+=tr("%1").arg(additionVector.at(r).at(j));    line+=tr(","); }
 
-        }
-
-        file.close();
+                if (r+1 == sequenceVector.size()) {
+                    line = line.left(line.length()-1); // remove the last comma
+                } else {
+                    line+=tr(","); // we need to add one more comma to add extra space for the new table of values
+                }
+            } out << line << "\n";
+        } file.close();
     }
 }
 

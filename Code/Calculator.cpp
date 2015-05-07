@@ -108,6 +108,16 @@ bool Calculator::isNumber(string s){
 }
 
 /**
+  * Returns true iff s represents a decimal integer
+  * Returns false for the empty string
+  * @param s The string to check
+  * @return true iff s contains only numbers
+  */
+bool Calculator::isDouble(string s){
+    return true; // FIX THIS LATER
+}
+
+/**
   * Returns the value that s represents.\n
   * If s is a number, that value it returned.\n
   * Otherwise s is treated as a variable and its value is returned.
@@ -142,13 +152,29 @@ int Calculator::toNumber(string s){
 }
 
 /**
+  * Returns an float containing the value represented by a string
+  * @param s The string containing the value
+  * @return The value contained in s
+  */
+double Calculator::toDouble(string s){
+    if(isDouble(s)){
+        double t;
+        stringstream ss(s);
+        ss >> t;
+        return t;
+    }else{
+        throw ESTRING;
+    }
+}
+
+/**
   * Evaluates a tokenized expression
   * @param n The value to use for n
   * @param R A vector containing all values R(x), x < n
   * @param s The tokenized expression
   * @return The value the expression evaluates to
   */
-int Calculator::evaluate(int n, vector<int>& R, vector<string> s){
+double Calculator::evaluate(int n, vector<int>& R, vector<string> s){
     evaluate(n, R, s, 0, 1, 1);
 }
 
@@ -160,7 +186,7 @@ int Calculator::evaluate(int n, vector<int>& R, vector<string> s){
   * @param n_0 The index of the first IC.
   * @return The value the expression evaluates to
   */
-int Calculator::evaluate(int n, vector<int>& R, vector<string> s, bool anchor, int anchorValue, signed int n_0){
+double Calculator::evaluate(int n, vector<int>& R, vector<string> s, bool anchor, int anchorValue, signed int n_0){
 
     /* if n is one of the IC, return R(n) */
     /* if n is a negative index, return an error */
@@ -234,7 +260,7 @@ int Calculator::evaluate(int n, vector<int>& R, vector<string> s, bool anchor, i
             if (toNumber(s[i+1]) == 0) {
                 throw ENUMBER;
             }
-            s[i-1] = toString(toNumber(s[i-1]) / toNumber(s[i+1]));
+            s[i-1] = toString( (double)toNumber(s[i-1]) / (double)toNumber(s[i+1]));
             s.erase(s.begin()+i, s.begin()+i+2);		/* erasing i..i+2 removes the operator and 2nd operand */
             i-=2;
         }
@@ -266,7 +292,7 @@ int Calculator::evaluate(int n, vector<int>& R, vector<string> s, bool anchor, i
     }
 
     // return the last remaining value (which will be the solution)
-    return toNumber(s[0]);
+    return toDouble(s[0]);
 }
 
 
@@ -382,15 +408,26 @@ int Calculator::algebraEvaluate(string s){
         throw ESYNTAX;
     }
 
-    return toNumber(expression[0]);
+    return toDouble(expression[0]);
 }
 
 /**
   * Converts an integer to a string
   * @param n The integer to convert
-  * @return The corresponsing string
+  * @return The corresponding string
   */
 string Calculator::toString(int n){
+    stringstream ss;
+    ss << n;
+    return ss.str();
+}
+
+/**
+  * Converts a float to a string
+  * @param n The float to convert
+  * @return The corresponding string
+  */
+string Calculator::toString(double n){
     stringstream ss;
     ss << n;
     return ss.str();

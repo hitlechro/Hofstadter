@@ -135,7 +135,7 @@ void ResultPage::showSequence(int r, int c){
         } else if (headers[c] == "Frequency"){
             Vtemp = frequencyVector;
         } else if (argument.substr(0, prefix.size()) == prefix){
-            Vtemp = additionVector;
+            Vtemp = sequenceVector; // we're doing this temporarily
         } else {
             Vtemp = sequenceVector; // we're doing this temporarily
         }
@@ -143,12 +143,14 @@ void ResultPage::showSequence(int r, int c){
         vector<vector<double> > V(Vtemp.size(), vector<double>(Vtemp.at(r).size(),0));
 
         // poor typecasting... fix this
-        if (headers[c] != "R(n)/n") {
+        if (headers[c] == "R(n)/n") {
+            V = RnDivnVector;
+        } else if (argument.substr(0, prefix.size()) == prefix){
+            V = additionVector;
+        } else {
             for (int i = 0; i != V.at(r).size(); i++) {
                 V.at(r).at(i) = (double) Vtemp.at(r).at(i);
             }
-        } else {
-            V = RnDivnVector;
         }
 
         /** if V is the vector, then V[1] either points to the first
@@ -1210,7 +1212,7 @@ void ResultPage::configOutputTable(SummaryOptions so, Sequence S, int row, int s
     if (so.additional) {
         QTableWidgetItem *additionalCell = new QTableWidgetItem(tr("Click"));
         mainTable->setItem(row, column++, additionalCell);
-        additionVector.push_back(static_cast<vector<int> >(S.addition));
+        additionVector.push_back(S.addition);
     }
 
     // a message will always be supplied

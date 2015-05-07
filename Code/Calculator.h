@@ -36,14 +36,17 @@ class Calculator {
         static bool isOperator(string s);
         static vector<string> tokenize(string s);
         static bool isNumber(string s);
+        static bool isDouble(string s);
         int parseOperand(string s);
         static int _parseOperand(string s); /* todo: paramap*/
         static int toNumber(string s);
-        int evaluate(int n, vector<int>& R, vector<string> s, bool anchor, int anchorValue, signed int n_0);
-        int evaluate(int n, vector<int>& R, vector<string> s);
+        static double toDouble(string s);
+        double evaluate(int n, vector<int>& R, vector<string> s, bool anchor, int anchorValue, signed int n_0);
+        double evaluate(int n, vector<int>& R, vector<string> s);
         int stringEvaluate(int n, vector<int>& R, string expression, bool anchor, int achorValue, signed int n_0);
         int algebraEvaluate(string expression);
         static string toString(int n);
+        static string toString(double n);
         /*static*/ void saveParameters(string s);
         static string stripSpaces(string s);
         static void createMap(vector<int> v);

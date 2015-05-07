@@ -25,11 +25,11 @@ class Sequence {
         int anchorValue;
         /* todo: document me */
         Vector R, twoRnMinusn, rnMinusRn;
-                Vector M, genStart, genEnd, frequency, addition;
+                Vector M, genStart, genEnd, frequency;
         /* todo: document me */
         vector<double> slowPropInterval, slowPropGeneration;
         /** Stores R(n)/n */
-        vector<double> RnDivn;
+        vector<double> RnDivn, addition;
         /* todo: document me */
         string form, spot;
         /** Whether the sequence is slow or not */

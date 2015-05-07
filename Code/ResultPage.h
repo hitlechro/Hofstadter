@@ -109,8 +109,8 @@ public:
 
     std::vector<std::vector<int> > sequenceVector, genStartVector, genEndVector;
 
-    std::vector<std::vector<int> > twoRnMinusnVector, rnMinusRnVector,  additionVector, frequencyVector;
-    std::vector<std::vector<double> > RnDivnVector, slowPropIntervalVector, slowPropGenerationVector;
+    std::vector<std::vector<int> > twoRnMinusnVector, rnMinusRnVector,  frequencyVector;
+    std::vector<std::vector<double> > RnDivnVector, additionVector, slowPropIntervalVector, slowPropGenerationVector;
     std::vector<int> ICSizeVector;
 
     //std::vector<std::string > ICParaVector;

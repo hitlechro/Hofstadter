@@ -388,7 +388,7 @@ bool Sequence::checkContainSubsequence(Vector subsequence){
 void Sequence::computeAddition(string pression){
     addition.push_back(-1);
     for (int i = startIndex, j = 1; j < R.size(); i++, j++) {
-        int val;
+        double val;
         try {
             val = c.evaluate(i, R, c.tokenize(pression), anchor, anchorValue, startIndex);
         } catch (int E) {

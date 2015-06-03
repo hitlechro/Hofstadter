@@ -777,24 +777,25 @@ void ResultPage::initializePage(){
     if (output == 1) { // We chose to export to a CSV Excel Document
         /** Appends the current recursion (in the entry field) to the file */
         /* try to open the file containing the recursions.
-        if it fails, just skip it */
+         * if it fails, just skip it */
 
         /* here we create a modal dialog for the user to choose the name of
          * the file they want to save as */
         QString filename = QFileDialog::getSaveFileName(
                     this, "Save as CSV file for Excel Documents",
                     QDir::currentPath(), "CSV files (*.csv)");
-        QFile file( filename );
 
-        // if the file already exists
-        if (file.exists()) {
-
-            // we always want to write to a new file
-            file.remove();
+        /* if the user clicked cancel, we'll return since they changed their
+         * mind */
+        if (filename.isEmpty()) {
+            return;
         }
 
-        // we want to make sure we can write to it
-        while (!file.open(QIODevice::Append | QIODevice::Text)) {
+        QFile file( filename );
+
+        /* we want to make sure we can write to it AND that we always
+         * clear the contents of the file before we write to it */
+        while (!file.open(QIODevice::Append | QIODevice::Truncate)) {
             QMessageBox msgBox;
             msgBox.setText("Please close the file: " + filename);
             msgBox.exec();

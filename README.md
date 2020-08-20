@@ -25,7 +25,7 @@ Any question can be directed to:
 * Use the default installation options. This includes letting Qt install MinGW as the compiler.
 
 2) Download the source from Github repository
-* This can be done from: https://github.com/hitlechro/Hofstadter/
+* This can be done from: https://github.com/robert-7/Hofstadter/
 
 3) Import the project.
 * Run Qt.
